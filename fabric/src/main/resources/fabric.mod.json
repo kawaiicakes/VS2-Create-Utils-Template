@@ -32,14 +32,12 @@
     ]
   },
   "mixins": [
-    "vsutil-common.mixins.json",
-    "vsutil.mixins.json"
+    "vsutil-common.mixins.json"
   ],
   "depends": {
     "minecraft": "${minecraft_version}",
     "valkyrienskies": ">=${vs2_version}",
     "fabricloader": ">=${fabric_loader_version}",
-    "fabric-api": "*",
-    "architectury": ">=${architectury_version}"
+    "fabric-api": "*"
   }
 }
