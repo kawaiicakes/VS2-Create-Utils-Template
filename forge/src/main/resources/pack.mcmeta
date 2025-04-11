@@ -1,6 +1,6 @@
 {
   "pack": {
-    "description": "VS Addon Template",
-    "pack_format": 8
+    "description": "VS2 Utilities",
+    "pack_format": 10
   }
 }
