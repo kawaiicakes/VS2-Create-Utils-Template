@@ -1,0 +1,10 @@
+{
+  "chat.vsutil.enable": "Collisions Enabled!",
+  "chat.vsutil.disable": "Collisions Disabled!",
+  "chat.vsutil.select": "Selected Ship!",
+  "chat.vsutil.invalid": "Invalid Selection!",
+
+  "tooltip.vsutil.id": "Current Selection: %1$s",
+
+  "item.vsutil.collision_wand": "Collision Wand"
+}
