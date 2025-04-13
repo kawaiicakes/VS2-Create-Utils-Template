@@ -3,6 +3,9 @@
   "chat.vsutil.disable": "Collisions Disabled!",
   "chat.vsutil.select": "Selected Ship!",
   "chat.vsutil.invalid": "Invalid Selection!",
+  "chat.vsutil.getid": "ID of Ship %1$s: %2$s",
+  "chat.vsutil.getslug": "Slug of Ship %1$s: %2$s",
+  "chat.vsutil.invalid_ship": "No such Ship with ID of %1$s!",
 
   "tooltip.vsutil.id": "Current Selection: %1$s",
 

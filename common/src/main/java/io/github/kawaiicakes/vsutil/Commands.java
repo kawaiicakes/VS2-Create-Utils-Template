@@ -2,16 +2,25 @@ package io.github.kawaiicakes.vsutil;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.logging.LogUtils;
 import io.github.kawaiicakes.vsutil.api.ShipifyLogic;
 import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
+import org.valkyrienskies.core.api.ships.ServerShip;
+import org.valkyrienskies.core.api.ships.Ship;
+import org.valkyrienskies.mod.common.VSGameUtilsKt;
+import org.valkyrienskies.mod.common.command.ShipArgument;
+import org.valkyrienskies.mod.mixinducks.feature.command.VSCommandSource;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -74,7 +83,6 @@ public class Commands {
                                             return 0;
                                         })
                                 ).then(
-                                        // FIXME: this didn't work
                                 argument("no-collide", BoolArgumentType.bool()).executes(context -> {
                                     try {
                                         ServerLevel level = context.getSource().getLevel();
@@ -111,13 +119,14 @@ public class Commands {
                                         throw e;
                                     }
                                     return 0;
-                                }))))) // FIXME: GENERIC TYPE CASTING
-        )/*.then(
+                                })))))
+        )).then(
                 literal("resize").then(argument("ship", ShipArgument.Companion.ships()).then(argument(
                         "scale", DoubleArgumentType.doubleArg(ShipifyLogic.getMinScaling())
                 ).executes(context -> {
                     try {
-                        ServerShip ship = (ServerShip) ShipArgument.Companion.getShip(context, "ship");
+                        @SuppressWarnings({"RedundantCast", "unchecked"})
+                        ServerShip ship = (ServerShip) ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "ship");
                         VSGameUtilsKt.getVsCore().scaleShip(
                                 VSGameUtilsKt.getShipObjectWorld(context.getSource().getLevel()),
                                 ship,
@@ -129,9 +138,52 @@ public class Commands {
                         throw e;
                     }
                     return 0;
-                }))))
-                */
+                })))
+        ).then(
+                literal("getid").then(argument("ship", ShipArgument.Companion.ships())
+                        .executes(context -> {
+                            try {
+                                @SuppressWarnings({"RedundantCast", "unchecked"})
+                                Ship ship = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "ship");
+                                ServerPlayer player = context.getSource().getPlayer();
 
-        );
+                                long id = ship.getId();
+
+                                if (player != null)
+                                    player.sendSystemMessage(Component.translatable("chat.vsutil.getid", ship.getSlug(), id));
+
+                                return 1;
+                            } catch (Exception e) {
+                                if (!(e instanceof CommandRuntimeException))
+                                    LOGGER.error("Exception while running shipify command!", e);
+                                throw e;
+                            }
+                        })
+                )
+        ).then(
+                literal("getslug").then(argument("id", LongArgumentType.longArg())
+                        .executes(context -> {
+                            try {
+                                long id = LongArgumentType.getLong(context, "id");
+                                ServerLevel level = context.getSource().getLevel();
+                                ServerPlayer player = context.getSource().getPlayer();
+
+                                ServerShip ship = VSGameUtilsKt.getShipObjectWorld(level).getAllShips().getById(id);
+
+                                Component displayToPlayer = ship != null
+                                        ? Component.translatable("chat.vsutil.getslug", id, ship.getSlug())
+                                        : Component.translatable("chat.vsutil.invalid_ship");
+
+                                if (player != null)
+                                    player.sendSystemMessage(displayToPlayer);
+
+                                return 1;
+                            } catch (Exception e) {
+                                if (!(e instanceof CommandRuntimeException))
+                                    LOGGER.error("Exception while running shipify command!", e);
+                                throw e;
+                            }
+                        })
+        ));
     }
 }

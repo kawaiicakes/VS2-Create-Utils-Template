@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
+import org.joml.primitives.AABBd;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.impl.game.ships.ShipDataCommon;
@@ -54,7 +55,13 @@ public class ShipifyLogic {
                 serverShip.setSlug(slug);
 
             if (noCollision) {
-                for (Ship ship : VSGameUtilsKt.getShipsIntersecting(level, serverShip.getWorldAABB())) {
+                AABBd shipBox = (AABBd) serverShip.getWorldAABB();
+                AABBd intersectionBox = new AABBd(
+                        shipBox.minX - 1.0D, shipBox.minY - 1.0D, shipBox.minZ - 1.0D,
+                        shipBox.maxX + 1.0D, shipBox.maxY + 1.0D, shipBox.minZ + 1.0D
+                );
+
+                for (Ship ship : VSGameUtilsKt.getShipsIntersecting(level, intersectionBox)) {
                     VSGameUtilsKt.getShipObjectWorld(level).disableCollisionBetweenBodies(serverShip.getId(), ship.getId());
                     CollisionPairData.add(serverShip.getId(), ship.getId());
                 }
