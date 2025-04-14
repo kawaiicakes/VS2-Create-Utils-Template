@@ -6,6 +6,8 @@
   "chat.vsutil.getid": "ID of Ship %1$s: %2$s",
   "chat.vsutil.getslug": "Slug of Ship %1$s: %2$s",
   "chat.vsutil.invalid_ship": "No such Ship with ID of %1$s!",
+  "chat.vsutil.disable_col": "Disabled all collisions for Ship %1$s!",
+  "chat.vsutil.enable_col": "Enabled all collisions for Ship %1$s!",
 
   "tooltip.vsutil.id": "Current Selection: %1$s",
 

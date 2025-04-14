@@ -3,9 +3,11 @@ package io.github.kawaiicakes.vsutil.fabric;
 import io.github.kawaiicakes.vsutil.Commands;
 import io.github.kawaiicakes.vsutil.VSUtil;
 import io.github.kawaiicakes.vsutil.api.CollisionPairData;
+import io.github.kawaiicakes.vsutil.api.DisabledCollisionData;
 import io.github.kawaiicakes.vsutil.item.NoCollisionWand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -31,6 +33,12 @@ public class VSUtilFabric implements ModInitializer {
 
         CommandRegistrationCallback.EVENT.register((a,b,c) -> a.register(Commands.registerCommands(literal(MOD_ID))));
 
-        ServerWorldEvents.LOAD.register((server, level) -> CollisionPairData.load(level));
+        ServerWorldEvents.LOAD.register((server, level) -> {
+            CollisionPairData.load(level);
+            DisabledCollisionData.load(level);
+        });
+
+        ServerLifecycleEvents.SERVER_STARTED.register((server) -> VSUtilImpl.SERVER = server.overworld().getServer());
+        ServerLifecycleEvents.SERVER_STOPPED.register((server) -> VSUtilImpl.SERVER = null);
     }
 }
