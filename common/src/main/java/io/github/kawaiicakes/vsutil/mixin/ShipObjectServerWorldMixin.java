@@ -14,14 +14,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.valkyrienskies.core.impl.game.ships.ShipData;
-import org.valkyrienskies.core.impl.shadow.DF;
+import org.valkyrienskies.core.impl.game.ships.ShipObjectServerWorld;
 
-@Mixin(DF.class)
+@Mixin(ShipObjectServerWorld.class)
 public abstract class ShipObjectServerWorldMixin {
     @Shadow(remap = false) public abstract boolean disableCollisionBetweenBodies(long shipId0, long shipId1);
 
     @Inject(
-            method = "createNewShipAtBlock",
+            method = "createNewShipAtBlock(Lorg/joml/Vector3ic;ZDLjava/lang/String;)Lorg/valkyrienskies/core/impl/game/ships/ShipData;",
             at = @At(value = "RETURN"),
             remap = false
     )
