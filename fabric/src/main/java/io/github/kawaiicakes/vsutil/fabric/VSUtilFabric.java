@@ -10,7 +10,6 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import org.valkyrienskies.mod.fabric.common.ValkyrienSkiesModFabric;
@@ -20,7 +19,7 @@ import static net.minecraft.commands.Commands.literal;
 
 public class VSUtilFabric implements ModInitializer {
     public static final Item COLLISION_WAND = Registry.register(
-            BuiltInRegistries.ITEM,
+            Registry.ITEM,
             new ResourceLocation(MOD_ID + ":collision_wand"),
             new NoCollisionWand()
     );

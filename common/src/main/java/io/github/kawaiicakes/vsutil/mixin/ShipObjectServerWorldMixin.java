@@ -2,7 +2,7 @@ package io.github.kawaiicakes.vsutil.mixin;
 
 import io.github.kawaiicakes.vsutil.VSUtil;
 import io.github.kawaiicakes.vsutil.api.DisabledCollisionData;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -14,14 +14,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.valkyrienskies.core.impl.game.ships.ShipData;
-import org.valkyrienskies.core.impl.game.ships.ShipObjectServerWorld;
+import org.valkyrienskies.core.impl.shadow.DF;
 
-@Mixin(ShipObjectServerWorld.class)
+@Mixin(DF.class)
 public abstract class ShipObjectServerWorldMixin {
     @Shadow(remap = false) public abstract boolean disableCollisionBetweenBodies(long shipId0, long shipId1);
 
     @Inject(
-            method = "createNewShipAtBlock(Lorg/joml/Vector3ic;ZDLjava/lang/String;)Lorg/valkyrienskies/core/impl/game/ships/ShipData;",
+            method = "createNewShipAtBlock",
             at = @At(value = "RETURN"),
             remap = false
     )
@@ -34,7 +34,7 @@ public abstract class ShipObjectServerWorldMixin {
             String[] dimStrings = dimensionId.split(":");
             ResourceLocation rl
                     = new ResourceLocation(dimStrings[dimStrings.length - 2], dimStrings[dimStrings.length - 1]);
-            ResourceKey<Level> levelKey = ResourceKey.create(Registries.DIMENSION, rl);
+            ResourceKey<Level> levelKey = ResourceKey.create(Registry.DIMENSION_REGISTRY, rl);
 
             // This SHOULD be fine to do given that the class injected into should only be calling this in levels that
             // a) exist
