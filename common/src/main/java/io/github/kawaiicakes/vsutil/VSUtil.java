@@ -7,11 +7,9 @@ import org.slf4j.Logger;
 
 // TODO - Sexy wand stuff including animated sprites and sounds
 // TODO - Fix vs commands not showing ships
-// TODO - Creating ships with a predetermined slug with named wand, adjustable miniship creator?
-// TODO - Miniship phys bearing?
+// TODO - Shipify wand (creating ships with a predetermined slug with named wand, adjustable miniship creator?)
 // TODO - Anti-gravity wand + command
 // TODO - Anti-buoyancy wand + command
-// TODO - Constraint wand + command
 public class VSUtil {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final String MOD_ID = "vsutil";

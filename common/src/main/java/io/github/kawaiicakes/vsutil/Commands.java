@@ -6,12 +6,15 @@ import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import io.github.kawaiicakes.vsutil.api.DisabledCollisionData;
+import io.github.kawaiicakes.vsutil.api.InteractLogic;
 import io.github.kawaiicakes.vsutil.api.ShipifyLogic;
 import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,10 +26,14 @@ import org.valkyrienskies.mod.common.VSGameUtilsKt;
 import org.valkyrienskies.mod.common.command.ShipArgument;
 import org.valkyrienskies.mod.mixinducks.feature.command.VSCommandSource;
 
+import java.util.Collection;
+
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 public class Commands {
+    public static final SimpleCommandExceptionType NO_PLAYERS = new SimpleCommandExceptionType(Component.translatable("permissions.vsutil.requires.player"));
+
     public static LiteralArgumentBuilder<CommandSourceStack> registerCommands(
             LiteralArgumentBuilder<CommandSourceStack> literalBuilder
     ) {
@@ -241,6 +248,66 @@ public class Commands {
                                 throw e;
                             }
                         }))
-        );
+        ).then(
+                literal("interact").then(argument("pos", BlockPosArgument.blockPos())
+                        .executes(context -> {
+                            try {
+                                ServerLevel level = context.getSource().getLevel();
+                                ServerPlayer player = context.getSource().getPlayer();
+                                BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "pos");
+
+                                if (player != null) {
+                                    player.sendSystemMessage(Component.translatable(
+                                            "chat.vsutil.interact",
+                                            Registry.BLOCK.getKey(level.getBlockState(pos).getBlock()),
+                                            pos
+                                    ));
+                                    InteractLogic.interactWith(player, level, pos);
+                                } else {
+                                    Collection<String> playersOnline = context.getSource().getOnlinePlayerNames();
+
+                                    if (playersOnline.isEmpty()) throw NO_PLAYERS.create();
+
+                                    String username = playersOnline.stream().findAny().orElse("");
+
+                                    if (username.isEmpty()) throw NO_PLAYERS.create();
+
+                                    ServerPlayer randomPlayer
+                                            = context.getSource().getServer().getPlayerList().getPlayerByName(username);
+
+                                    if (randomPlayer == null) throw NO_PLAYERS.create();
+
+                                    InteractLogic.interactWith(randomPlayer, level, pos);
+                                }
+
+                                return 0;
+                            } catch (Exception e) {
+                                if (!(e instanceof CommandRuntimeException))
+                                    VSUtil.LOGGER.error("Exception while running command!", e);
+                                throw e;
+                            }
+                        }))
+        );/*.then( THIS SHIT IS BORKED BC IT HASN'T BEEN IMPLEMENTED YET WTF
+                literal("weld").then(argument("first", ShipArgument.Companion.ships())
+                        .then(argument("second", ShipArgument.Companion.ships()).executes(
+                                context -> {
+                                    try {
+                                        ServerLevel level = context.getSource().getLevel();
+
+                                        @SuppressWarnings({"unchecked", "RedundantCast"})
+                                        Ship ship0 = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "first");
+                                        @SuppressWarnings({"unchecked", "RedundantCast"})
+                                        Ship ship1 = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "second");
+
+                                        WeldLogic.weldShips(level, ship0.getId(), ship1.getId());
+
+                                        return 0;
+                                    } catch (Exception e) {
+                                        if (!(e instanceof CommandRuntimeException))
+                                            VSUtil.LOGGER.error("Exception while running command!", e);
+                                        throw e;
+                                    }
+                        })))
+        );*/
     }
 }
