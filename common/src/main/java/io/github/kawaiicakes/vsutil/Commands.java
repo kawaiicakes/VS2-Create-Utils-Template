@@ -14,16 +14,20 @@ import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.valkyrienskies.core.api.ships.QueryableShipData;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.apigame.world.ServerShipWorldCore;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 import org.valkyrienskies.mod.common.command.ShipArgument;
+import org.valkyrienskies.mod.common.util.VectorConversionsMCKt;
 import org.valkyrienskies.mod.mixinducks.feature.command.VSCommandSource;
 
 import java.util.Collection;
@@ -287,7 +291,59 @@ public class Commands {
                                 throw e;
                             }
                         }))
-        );/*.then( THIS SHIT IS BORKED BC IT HASN'T BEEN IMPLEMENTED YET WTF
+        ).then(
+                literal("renameCurrent").then(argument("name", StringArgumentType.word())
+                        .executes(context -> {
+                            try {
+                                ServerLevel level = context.getSource().getLevel();
+                                ServerShipWorldCore core = VSGameUtilsKt.getShipObjectWorld(level);
+
+                                if (context.getSource().getPlayer() != null) {
+                                    Vec3 below = context.getSource().getPosition().relative(Direction.DOWN, 0.1);
+                                    AABB box = new AABB(context.getSource().getPosition(), below);
+
+                                    byte count = 0;
+                                    Ship toRename = null;
+                                    for (Ship ship : VSGameUtilsKt.getShipsIntersecting(level, box)) {
+                                        if (count == 1) throw new CommandRuntimeException(
+                                                Component.translatable("argument.valkyrienskies.ship.multiple_found")
+                                        );
+                                        count++;
+                                        toRename = ship;
+                                    }
+                                    if (toRename == null) throw new CommandRuntimeException(
+                                            Component.translatable("argument.valkyrienskies.ship.no_found")
+                                    );
+
+                                    ServerShip ship = core.getAllShips().getById(toRename.getId());
+                                    if (ship == null) throw new AssertionError();
+
+                                    ship.setSlug(StringArgumentType.getString(context, "name"));
+                                    context.getSource().getPlayer().sendSystemMessage(
+                                            Component.translatable("chat.vsutil.successful_rename")
+                                    );
+                                } else {
+                                    ServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(
+                                            level,
+                                            VectorConversionsMCKt.toJOML(context.getSource().getPosition())
+                                    );
+
+                                    if (ship == null) throw new CommandRuntimeException(
+                                            Component.translatable("argument.valkyrienskies.ship.no_found")
+                                    );
+
+                                    ship.setSlug(StringArgumentType.getString(context, "name"));
+                                }
+
+                                return 0;
+                            } catch (Exception e) {
+                                if (!(e instanceof CommandRuntimeException))
+                                    VSUtil.LOGGER.error("Exception while running command!", e);
+                                throw e;
+                            }
+                        }))
+        );
+        /*.then( THIS SHIT IS BORKED BC IT HASN'T BEEN IMPLEMENTED YET WTF
                 literal("weld").then(argument("first", ShipArgument.Companion.ships())
                         .then(argument("second", ShipArgument.Companion.ships()).executes(
                                 context -> {
