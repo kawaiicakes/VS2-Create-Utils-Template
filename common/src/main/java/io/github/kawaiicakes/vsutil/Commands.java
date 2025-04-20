@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import io.github.kawaiicakes.vsutil.api.CollisionPairData;
 import io.github.kawaiicakes.vsutil.api.DisabledCollisionData;
 import io.github.kawaiicakes.vsutil.api.InteractLogic;
 import io.github.kawaiicakes.vsutil.api.ShipifyLogic;
@@ -222,7 +223,31 @@ public class Commands {
                                     VSUtil.LOGGER.error("Exception while running shipify command!", e);
                                 throw e;
                             }
-                        }))
+                        }).then(argument("otherShip", ShipArgument.Companion.ships()).executes(context -> {
+                            try {
+                                @SuppressWarnings({"unchecked", "RedundantCast"})
+                                Ship ship = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "ship");
+                                @SuppressWarnings({"unchecked", "RedundantCast"})
+                                Ship otherShip = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "otherShip");
+                                ServerLevel level = context.getSource().getLevel();
+                                ServerPlayer player = context.getSource().getPlayer();
+
+                                CollisionPairData.add(ship.getId(), otherShip.getId());
+
+                                ServerShipWorldCore shipObjectWorld = VSGameUtilsKt.getShipObjectWorld(level);
+
+                                shipObjectWorld.disableCollisionBetweenBodies(ship.getId(), otherShip.getId());
+
+                                if (player != null)
+                                    player.sendSystemMessage(Component.translatable("chat.vsutil.disable_col_between", ship.getSlug(), otherShip.getSlug()));
+
+                                return 0;
+                            } catch (Exception e) {
+                                if (!(e instanceof CommandRuntimeException))
+                                    VSUtil.LOGGER.error("Exception while running shipify command!", e);
+                                throw e;
+                            }
+                        })))
         ).then(
                 literal("enableCollisions").then(argument("ship", ShipArgument.Companion.ships())
                         .executes(context -> {
@@ -251,7 +276,31 @@ public class Commands {
                                     VSUtil.LOGGER.error("Exception while running shipify command!", e);
                                 throw e;
                             }
-                        }))
+                        }).then(argument("otherShip", ShipArgument.Companion.ships()).executes(context -> {
+                            try {
+                                @SuppressWarnings({"unchecked", "RedundantCast"})
+                                Ship ship = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "ship");
+                                @SuppressWarnings({"unchecked", "RedundantCast"})
+                                Ship otherShip = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "otherShip");
+                                ServerLevel level = context.getSource().getLevel();
+                                ServerPlayer player = context.getSource().getPlayer();
+
+                                CollisionPairData.remove(ship.getId(), otherShip.getId());
+
+                                ServerShipWorldCore shipObjectWorld = VSGameUtilsKt.getShipObjectWorld(level);
+
+                                shipObjectWorld.enableCollisionBetweenBodies(ship.getId(), otherShip.getId());
+
+                                if (player != null)
+                                    player.sendSystemMessage(Component.translatable("chat.vsutil.enable_col_between", ship.getSlug(), otherShip.getSlug()));
+
+                                return 0;
+                            } catch (Exception e) {
+                                if (!(e instanceof CommandRuntimeException))
+                                    VSUtil.LOGGER.error("Exception while running shipify command!", e);
+                                throw e;
+                            }
+                        })))
         ).then(
                 literal("interact").then(argument("pos", BlockPosArgument.blockPos())
                         .executes(context -> {
