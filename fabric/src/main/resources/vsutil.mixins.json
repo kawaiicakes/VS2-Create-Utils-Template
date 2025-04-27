@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "io.github.kawaiicakes.vsutil.fabric.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "tournament.RedstoneWireBlockMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

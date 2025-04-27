@@ -11,7 +11,7 @@
     "homepage": "${homepage}",
     "sources": "${sources}"
   },
-  "license": "${mod_license}",
+  "license": "Apache-2.0 AND MIT",
   "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
   "entrypoints": {
@@ -32,6 +32,7 @@
     ]
   },
   "mixins": [
+    "vsutil.mixins.json",
     "vsutil-common.mixins.json"
   ],
   "depends": {

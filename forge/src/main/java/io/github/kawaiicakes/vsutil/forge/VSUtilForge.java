@@ -5,8 +5,15 @@ import io.github.kawaiicakes.vsutil.VSUtil;
 import io.github.kawaiicakes.vsutil.api.CollisionPairData;
 import io.github.kawaiicakes.vsutil.api.DisabledCollisionData;
 import io.github.kawaiicakes.vsutil.item.NoCollisionWand;
+import io.github.kawaiicakes.vsutil.tournament.TournamentBlocks;
+import io.github.kawaiicakes.vsutil.tournament.TournamentItems;
+import io.github.kawaiicakes.vsutil.tournament.TournamentModels;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.level.LevelEvent;
@@ -24,6 +31,7 @@ import static net.minecraft.commands.Commands.literal;
 
 @Mod(VSUtil.MOD_ID)
 public class VSUtilForge {
+    private boolean happenedClientSetup = false;
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
     public static final RegistryObject<Item> COLLISION_WAND
             = ITEMS.register("collision_wand", NoCollisionWand::new);
@@ -33,12 +41,31 @@ public class VSUtilForge {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modBus.addListener(this::clientSetup);
+        modBus.addListener(this::onModelRegistry);
+        modBus.addListener(this::entityRenderers);
         forgeBus.addListener(VSUtilForge::onLevelLoaded);
         forgeBus.addListener(VSUtilForge::onRegisterCommands);
 
         ITEMS.register(modBus);
 
+        TournamentItems.INSTANCE.TAB = new CreativeModeTab("vsutil.main_tab") {
+            @Override
+            public ItemStack makeIcon() {
+                return new ItemStack(TournamentBlocks.INSTANCE.PROP_SMALL.get());
+            }
+        };
+
         init();
+    }
+
+    @SubscribeEvent
+    public void entityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        initClientRenderers(event::registerBlockEntityRenderer);
+    }
+
+    @SubscribeEvent
+    public void onModelRegistry(ModelEvent.RegisterAdditional event) {
+        TournamentModels.INSTANCE.MODELS.forEach(event::register);
     }
 
     @SubscribeEvent
@@ -53,7 +80,12 @@ public class VSUtilForge {
         DisabledCollisionData.load(serverLevel);
     }
 
-    private void clientSetup(FMLClientSetupEvent event) {
+    @SubscribeEvent
+    public void clientSetup(FMLClientSetupEvent event) {
+        if (this.happenedClientSetup) {
+            return;
+        }
+        this.happenedClientSetup = true;
         initClient();
     }
 }

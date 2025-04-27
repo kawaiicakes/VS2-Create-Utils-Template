@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "vsutil:prop_big",
+    "vsutil:prop_small"
+  ]
+}

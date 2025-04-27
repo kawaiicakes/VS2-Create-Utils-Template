@@ -304,6 +304,7 @@ public class Commands {
         ).then(
                 literal("interact").then(argument("pos", BlockPosArgument.blockPos())
                         .executes(context -> {
+                            // FIXME - Unreliable at getting phys bearings to start.
                             try {
                                 ServerLevel level = context.getSource().getLevel();
                                 ServerPlayer player = context.getSource().getPlayer();
@@ -317,18 +318,13 @@ public class Commands {
                                     ));
                                     InteractLogic.interactWith(player, level, pos);
                                 } else {
-                                    Collection<String> playersOnline = context.getSource().getOnlinePlayerNames();
-
-                                    if (playersOnline.isEmpty()) throw NO_PLAYERS.create();
-
-                                    String username = playersOnline.stream().findAny().orElse("");
-
-                                    if (username.isEmpty()) throw NO_PLAYERS.create();
-
-                                    ServerPlayer randomPlayer
-                                            = context.getSource().getServer().getPlayerList().getPlayerByName(username);
-
-                                    if (randomPlayer == null) throw NO_PLAYERS.create();
+                                    ServerPlayer randomPlayer = context.getSource()
+                                            .getServer()
+                                            .getPlayerList()
+                                            .getPlayers()
+                                            .stream()
+                                            .findAny()
+                                            .orElseThrow(NO_PLAYERS::create);
 
                                     InteractLogic.interactWith(randomPlayer, level, pos);
                                 }
@@ -392,6 +388,7 @@ public class Commands {
                             }
                         }))
         );
+        // TODO
         /*.then( THIS SHIT IS BORKED BC IT HASN'T BEEN IMPLEMENTED YET WTF
                 literal("weld").then(argument("first", ShipArgument.Companion.ships())
                         .then(argument("second", ShipArgument.Companion.ships()).executes(

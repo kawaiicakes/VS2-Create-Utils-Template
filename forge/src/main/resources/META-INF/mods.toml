@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "${forge_version}"
 issueTrackerURL = "${issue_tracker}"
-license = "${mod_license}"
+license = "Apache-2.0 AND MIT"
 
 [[mods]]
 modId = "${mod_id}"

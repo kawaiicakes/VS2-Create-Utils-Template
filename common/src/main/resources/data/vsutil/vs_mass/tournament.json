@@ -1,0 +1,10 @@
+[
+  {
+    "block": "vsutil:prop_small",
+    "mass": 1200.0
+  },
+  {
+    "block": "vsutil:prop_big",
+    "mass": 5200.0
+  }
+]

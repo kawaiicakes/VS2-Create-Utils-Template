@@ -27,6 +27,7 @@ loom {
 
     forge {
         convertAccessWideners = true
+        mixinConfig "vsutil.mixins.json"
         mixinConfig "vsutil-common.mixins.json"
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
     }

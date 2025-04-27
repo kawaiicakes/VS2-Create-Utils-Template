@@ -17,5 +17,8 @@
 
   "tooltip.vsutil.id": "Current Selection: %1$s",
 
+  "block.vs_tournament.prop_big": "Propeller (big)",
+  "block.vs_tournament.prop_small": "Propeller (small)",
+
   "item.vsutil.collision_wand": "Collision Wand"
 }
