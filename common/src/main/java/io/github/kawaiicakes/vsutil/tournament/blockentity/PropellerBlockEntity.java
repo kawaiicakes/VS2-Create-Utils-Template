@@ -190,25 +190,25 @@ public abstract class PropellerBlockEntity<T extends BlockEntity> extends BlockE
                     TournamentBlockEntities.INSTANCE.PROP_BIG.get(),
                     pos,
                     state,
-                    TournamentConfig.INSTANCE.SERVER.propellerDefaultBigForce,
-                    TournamentConfig.INSTANCE.SERVER.propellerDefaultBigSpeed,
-                    TournamentConfig.INSTANCE.SERVER.propellerDefaultBigAccel
+                    TournamentConfig.SERVER.getPropellerDefaultBigForce(),
+                    TournamentConfig.SERVER.getPropellerDefaultBigSpeed(),
+                    TournamentConfig.SERVER.getPropellerDefaultBigAccel()
             );
         }
 
         @Override
         public double getMaxConfigForce() {
-            return TournamentConfig.INSTANCE.SERVER.propellerBigForce;
+            return TournamentConfig.SERVER.getPropellerBigForce();
         }
 
         @Override
         public float getMaxConfigSpeed() {
-            return TournamentConfig.INSTANCE.SERVER.propellerBigSpeed;
+            return TournamentConfig.SERVER.getPropellerBigSpeed();
         }
 
         @Override
         public float getMaxConfigAcceleration() {
-            return TournamentConfig.INSTANCE.SERVER.propellerBigAccel;
+            return TournamentConfig.SERVER.getPropellerBigAccel();
         }
     }
 
@@ -218,25 +218,25 @@ public abstract class PropellerBlockEntity<T extends BlockEntity> extends BlockE
                     TournamentBlockEntities.INSTANCE.PROP_SMALL.get(),
                     pos,
                     state,
-                    TournamentConfig.INSTANCE.SERVER.propellerDefaultSmallForce,
-                    TournamentConfig.INSTANCE.SERVER.propellerDefaultSmallSpeed,
-                    TournamentConfig.INSTANCE.SERVER.propellerDefaultSmallAccel
+                    TournamentConfig.SERVER.getPropellerDefaultSmallForce(),
+                    TournamentConfig.SERVER.getPropellerDefaultSmallSpeed(),
+                    TournamentConfig.SERVER.getPropellerDefaultSmallAccel()
             );
         }
 
         @Override
         public double getMaxConfigForce() {
-            return TournamentConfig.INSTANCE.SERVER.propellerSmallForce;
+            return TournamentConfig.SERVER.getPropellerSmallForce();
         }
 
         @Override
         public float getMaxConfigSpeed() {
-            return TournamentConfig.INSTANCE.SERVER.propellerSmallSpeed;
+            return TournamentConfig.SERVER.getPropellerSmallSpeed();
         }
 
         @Override
         public float getMaxConfigAcceleration() {
-            return TournamentConfig.INSTANCE.SERVER.propellerSmallAccel;
+            return TournamentConfig.SERVER.getPropellerSmallAccel();
         }
     }
 }
