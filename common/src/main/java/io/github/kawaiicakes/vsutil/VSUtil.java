@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import io.github.kawaiicakes.vsutil.tournament.TournamentBlockEntities;
 import io.github.kawaiicakes.vsutil.tournament.TournamentBlocks;
+import io.github.kawaiicakes.vsutil.tournament.TournamentConfig;
 import io.github.kawaiicakes.vsutil.tournament.TournamentItems;
 import io.github.kawaiicakes.vsutil.tournament.ship.TournamentShips;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -11,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.slf4j.Logger;
+import org.valkyrienskies.core.impl.config.VSConfigClass;
 import org.valkyrienskies.core.impl.hooks.VSEvents;
 
 // TODO - Sexy wand stuff including animated sprites and sounds
@@ -23,6 +25,8 @@ public class VSUtil {
     public static final String MOD_ID = "vsutil";
 
     public static void init() {
+        VSConfigClass.Companion.registerConfig("vs_tournament", TournamentConfig.class);
+
         TournamentBlocks.INSTANCE.register();
         TournamentBlockEntities.INSTANCE.register();
         TournamentItems.INSTANCE.register();

@@ -5,7 +5,7 @@ import io.github.kawaiicakes.vsutil.VSUtil;
 import io.github.kawaiicakes.vsutil.api.CollisionPairData;
 import io.github.kawaiicakes.vsutil.api.DisabledCollisionData;
 import io.github.kawaiicakes.vsutil.item.NoCollisionWand;
-import io.github.kawaiicakes.vsutil.tournament.TournamentBlocks;
+import io.github.kawaiicakes.vsutil.network.forge.VSUtilPacketsImpl;
 import io.github.kawaiicakes.vsutil.tournament.TournamentItems;
 import io.github.kawaiicakes.vsutil.tournament.TournamentModels;
 import net.minecraft.server.level.ServerLevel;
@@ -21,10 +21,12 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 import static io.github.kawaiicakes.vsutil.VSUtil.*;
 import static net.minecraft.commands.Commands.literal;
@@ -43,6 +45,7 @@ public class VSUtilForge {
         modBus.addListener(this::clientSetup);
         modBus.addListener(this::onModelRegistry);
         modBus.addListener(this::entityRenderers);
+        modBus.addListener(this::commonSetup);
         forgeBus.addListener(VSUtilForge::onLevelLoaded);
         forgeBus.addListener(VSUtilForge::onRegisterCommands);
 
@@ -50,12 +53,17 @@ public class VSUtilForge {
 
         TournamentItems.INSTANCE.TAB = new CreativeModeTab("vsutil.main_tab") {
             @Override
-            public ItemStack makeIcon() {
-                return new ItemStack(TournamentBlocks.INSTANCE.PROP_SMALL.get());
+            public @NotNull ItemStack makeIcon() {
+                return new ItemStack(COLLISION_WAND.get());
             }
         };
 
         init();
+    }
+
+    @SubscribeEvent
+    public void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(VSUtilPacketsImpl::register);
     }
 
     @SubscribeEvent

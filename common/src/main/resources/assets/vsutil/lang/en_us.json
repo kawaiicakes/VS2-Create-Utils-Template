@@ -12,13 +12,31 @@
   "chat.vsutil.enable_col_between": "Enabled collisions between Ship %1$s and Ship %2$s!",
   "chat.vsutil.interact": "Successfully interacted with %1$s at %2$s!",
   "chat.vsutil.successful_rename": "Successfully renamed Ship!",
+  "chat.vsutil.prop_success": "Successfully set stats for propeller!",
+
+  "screen.vsutil.prop_stats": "",
+  "screen.vsutil.prop_force": "",
+  "screen.vsutil.prop_maxSpeed": "",
+  "screen.vsutil.prop_accel": "",
+  "screen.vsutil.prop_true": "PREVENT FURTHER EDITS",
+  "screen.vsutil.prop_false": "ALLOW FURTHER EDITS",
 
   "permissions.vsutil.requires.player": "This command requires at least one player to be online!",
 
   "tooltip.vsutil.id": "Current Selection: %1$s",
 
-  "block.vs_tournament.prop_big": "Propeller (big)",
-  "block.vs_tournament.prop_small": "Propeller (small)",
+  "block.vsutil.prop_big": "Propeller (big)",
+  "block.vsutil.prop_small": "Propeller (small)",
 
-  "item.vsutil.collision_wand": "Collision Wand"
+  "itemGroup.vsutil.main_tab": "VS Utils",
+
+  "item.vsutil.collision_wand": "Collision Wand",
+
+  "error.vsutil.not_editable": "This block has been locked from further edits!",
+  "error.vsutil.c2s_request": "Invalid request sent to server!",
+  "error.vsutil.packet_send": "Error while attempting to send packet to server!",
+  "error.vsutil.not_propeller": "This block is no longer a propeller!",
+  "error.vsutil.max_force": "Force of %1$s exceeds server max of %2$s!",
+  "error.vsutil.max_speed": "Speed of %1$s exceeds server max of %2$s!",
+  "error.vsutil.max_accel": "Acceleration of %1$s exceeds server max of %2$s!"
 }

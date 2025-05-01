@@ -72,12 +72,14 @@ public class TournamentShips implements ShipForcesInducer {
         this.propellers.forEach(
                 prop -> {
 
-                    prop.touchingWater = level.isWaterAt(
-                            shipToWorldBlock(
-                                    level,
-                                    new Vector3d(prop.pos.x, prop.pos.y, prop.pos.z)
-                            )
+                    BlockPos pos = shipToWorldBlock(
+                            level,
+                            new Vector3d(prop.pos.x, prop.pos.y, prop.pos.z)
                     );
+
+                    if (pos == null) return;
+
+                    prop.touchingWater = level.isWaterAt(pos);
 
                     BlockEntity unknownBe = level.getBlockEntity(VectorConversionsMCKt.toBlockPos(prop.pos));
 
@@ -103,7 +105,7 @@ public class TournamentShips implements ShipForcesInducer {
 
     public static BlockPos shipToWorldBlock(Level level, Vector3d pos) {
         LoadedShip shipCore = VSGameUtilsKt.getShipObjectManagingPos(level, pos);
-        if (shipCore == null) throw new IllegalArgumentException("Pos in level is not in shipyard!");
+        if (shipCore == null) return null;
         Vector3d transformed = shipCore
                 .getShipToWorld()
                 .transformPosition(pos);

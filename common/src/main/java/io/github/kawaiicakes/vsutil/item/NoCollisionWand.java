@@ -1,6 +1,7 @@
 package io.github.kawaiicakes.vsutil.item;
 
 import io.github.kawaiicakes.vsutil.api.CollisionPairData;
+import io.github.kawaiicakes.vsutil.tournament.TournamentItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -32,7 +33,7 @@ public class NoCollisionWand extends Item {
     public static final String SHIP_NBT_KEY = "ship";
 
     public NoCollisionWand() {
-        super(new Properties().rarity(Rarity.EPIC).stacksTo(1));
+        super(new Properties().rarity(Rarity.EPIC).stacksTo(1).tab(TournamentItems.INSTANCE.TAB));
     }
 
     @Override

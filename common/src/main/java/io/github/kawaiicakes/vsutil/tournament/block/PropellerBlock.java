@@ -1,13 +1,16 @@
 package io.github.kawaiicakes.vsutil.tournament.block;
 
+import io.github.kawaiicakes.vsutil.api.LocalPlayerInterfaceMixin;
 import io.github.kawaiicakes.vsutil.tournament.util.block.DirectionalBaseEntityBlock;
 import io.github.kawaiicakes.vsutil.tournament.blockentity.PropellerBlockEntity;
 import io.github.kawaiicakes.vsutil.tournament.util.RotShapes;
-import io.github.kawaiicakes.vsutil.tournament.ship.TournamentShips;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -20,10 +23,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-import org.valkyrienskies.mod.common.util.VectorConversionsMCKt;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
@@ -31,6 +34,7 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+// FIXME - Crash when deleting ships with props on them: Pos in level not in shipyard!
 @SuppressWarnings("deprecation")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -52,10 +56,9 @@ public class PropellerBlock extends DirectionalBaseEntityBlock implements Redsto
         return best;
     }
 
-    public final double mult;
     public final BiFunction<BlockPos, BlockState, BlockEntity> beConstr;
 
-    public PropellerBlock(double mult, BiFunction<BlockPos, BlockState, BlockEntity> beConstr) {
+    public PropellerBlock(BiFunction<BlockPos, BlockState, BlockEntity> beConstr) {
         super(
                 Properties.of(Material.STONE)
                         .sound(SoundType.STONE)
@@ -66,7 +69,6 @@ public class PropellerBlock extends DirectionalBaseEntityBlock implements Redsto
                 defaultBlockState().setValue(FACING, Direction.NORTH)
         );
 
-        this.mult = mult;
         this.beConstr = beConstr;
     }
 
@@ -91,34 +93,21 @@ public class PropellerBlock extends DirectionalBaseEntityBlock implements Redsto
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, level, pos, oldState, isMoving);
 
-        if (!(level instanceof ServerLevel serverLevel)) return;
+        if (!(level instanceof ServerLevel)) return;
 
         int signal = getPropSignal(state, level, pos);
 
-        PropellerBlockEntity<?> be = level.getBlockEntity(pos) instanceof PropellerBlockEntity<?> prop
-                ? prop
-                : null;
-
-        if (be == null) return;
+        if (!(level.getBlockEntity(pos) instanceof PropellerBlockEntity<?> be)) return;
 
         be.signal = signal;
         be.update();
-
-        TournamentShips instance = TournamentShips.get(serverLevel, pos);
-        if (instance != null)
-            instance.addPropeller(
-                    VectorConversionsMCKt.toJOML(pos),
-                    VectorConversionsMCKt.toJOMLD(state.getValue(FACING).getNormal()).mul(mult)
-            );
+        be.attachPhysics();
     }
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (level instanceof ServerLevel serverLevel) {
-            TournamentShips instance = TournamentShips.get(serverLevel, pos);
-            if (instance != null)
-                instance.removePropeller(VectorConversionsMCKt.toJOML(pos));
-        }
+        if (level instanceof ServerLevel serverLevel)
+            PropellerBlockEntity.removePhysics(serverLevel, pos);
 
         super.onRemove(state, level, pos, newState, isMoving);
     }
@@ -151,6 +140,22 @@ public class PropellerBlock extends DirectionalBaseEntityBlock implements Redsto
                 : context.getNearestLookingDirection();
 
         return this.defaultBlockState().setValue(FACING, dir);
+    }
+
+    @SuppressWarnings("RedundantCast")
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+
+        if (blockEntity instanceof PropellerBlockEntity<?> prop) {
+            if (player.level.isClientSide)
+                ((LocalPlayerInterfaceMixin) ((Object) player)).vsutil$openPropeller(prop);
+            return prop.isUneditable()
+                    ? InteractionResult.PASS
+                    : InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
+        return InteractionResult.PASS;
     }
 
     @Override

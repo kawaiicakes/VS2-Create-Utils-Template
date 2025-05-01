@@ -29,18 +29,12 @@ public class TournamentBlocks {
     public void register() {
         PROP_BIG = register(
                 "prop_big",
-                () -> new PropellerBlock(
-                        10000,
-                        PropellerBlockEntity.BigPropellerBlockEntity::new
-                )
+                () -> new PropellerBlock(PropellerBlockEntity.BigPropellerBlockEntity::new)
         );
 
         PROP_SMALL = register(
                 "prop_small",
-                () -> new PropellerBlock(
-                        1000,
-                        PropellerBlockEntity.SmallPropellerBlockEntity::new
-                )
+                () -> new PropellerBlock(PropellerBlockEntity.SmallPropellerBlockEntity::new)
         );
 
         this.BLOCKS.applyAll();

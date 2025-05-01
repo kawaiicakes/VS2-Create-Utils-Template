@@ -5,8 +5,8 @@ import io.github.kawaiicakes.vsutil.VSUtil;
 import io.github.kawaiicakes.vsutil.api.CollisionPairData;
 import io.github.kawaiicakes.vsutil.api.DisabledCollisionData;
 import io.github.kawaiicakes.vsutil.item.NoCollisionWand;
+import io.github.kawaiicakes.vsutil.network.fabric.VSUtilPacketsImpl;
 import io.github.kawaiicakes.vsutil.tournament.TickScheduler;
-import io.github.kawaiicakes.vsutil.tournament.TournamentBlocks;
 import io.github.kawaiicakes.vsutil.tournament.TournamentItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -43,9 +43,11 @@ public class VSUtilFabric implements ModInitializer {
             DisabledCollisionData.load(level);
         });
 
+        VSUtilPacketsImpl.register();
+
         TournamentItems.INSTANCE.TAB = FabricItemGroupBuilder
                 .create(new ResourceLocation(VSUtil.MOD_ID, "main_tab"))
-                .icon(() -> new ItemStack(TournamentBlocks.INSTANCE.PROP_SMALL.get()))
+                .icon(() -> new ItemStack(COLLISION_WAND))
                 .build();
 
         ServerTickEvents.END_SERVER_TICK.register(TickScheduler.INSTANCE::tickServer);
