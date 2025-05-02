@@ -14,10 +14,10 @@
   "chat.vsutil.successful_rename": "Successfully renamed Ship!",
   "chat.vsutil.prop_success": "Successfully set stats for propeller!",
 
-  "screen.vsutil.prop_stats": "",
-  "screen.vsutil.prop_force": "",
-  "screen.vsutil.prop_maxSpeed": "",
-  "screen.vsutil.prop_accel": "",
+  "screen.vsutil.prop_stats": "Propeller Stats",
+  "screen.vsutil.prop_force": "Maximum force this propeller applies at max speed. | MAX: %1$s",
+  "screen.vsutil.prop_maxSpeed": "Maximum speed this propeller can achieve. | MAX: %1$s",
+  "screen.vsutil.prop_accel": "The acceleration of this propeller. | MAX: %1$s",
   "screen.vsutil.prop_true": "PREVENT FURTHER EDITS",
   "screen.vsutil.prop_false": "ALLOW FURTHER EDITS",
 

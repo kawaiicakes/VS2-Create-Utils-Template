@@ -63,6 +63,7 @@ public class PropellerBlockScreen extends Screen {
         this.addRenderableWidget(
                 CycleButton.builder(
                         boolValue -> Component.translatable("screen.vsutil.prop_" + boolValue)
+                                .withStyle((Boolean) boolValue ? ChatFormatting.RED : ChatFormatting.GREEN)
                 )
                 .withValues(
                         Boolean.TRUE,
@@ -72,26 +73,25 @@ public class PropellerBlockScreen extends Screen {
                 .withInitialValue(Boolean.FALSE)
                 .create(
                         this.width / 2 - 4 - 150, 185,
-                        50, 20,
+                        308, 20,
                         Component.literal("FINALIZE"),
                         (cycleButton, boolValue) -> this.finalize = (boolean) boolValue
                 )
         );
 
-        // TODO - y
-        this.force = new NumberBox(this.font, this.width / 2 - 152, 0, "force");
+        this.force = new NumberBox(this.font, this.width / 2 - 3 - 150, 64, "force");
         // digits in max double value
         this.force.setMaxLength(309);
         this.force.setValue(Double.toString(prop.getForce()));
         this.addWidget(this.force);
 
-        this.maxSpeed = new NumberBox(this.font, this.width / 2 - 152, 60, "maxSpeed");
+        this.maxSpeed = new NumberBox(this.font, this.width / 2 - 3 - 150, 110, "maxSpeed");
         // digits in max float value
         this.maxSpeed.setMaxLength(128);
         this.maxSpeed.setValue(Float.toString(prop.getMaxSpeed()));
         this.addWidget(this.maxSpeed);
 
-        this.accel = new NumberBox(this.font, this.width / 2 - 152, 80, "accel");
+        this.accel = new NumberBox(this.font, this.width / 2 - 3 - 150, 156, "accel");
         // digits in max float value
         this.accel.setMaxLength(128);
         this.accel.setValue(Float.toString(prop.getAcceleration()));
@@ -139,11 +139,52 @@ public class PropellerBlockScreen extends Screen {
 
     @Override
     public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+        PropellerBlockEntity<?> prop = this.prop.get();
+        if (prop == null) {
+            this.onCancel();
+            return;
+        }
+
         this.renderBackground(poseStack);
-        // drawString(poseStack, this.font, Component.translatable("screen.vsutil.prop_stats"), this.force.x);
+        drawCenteredString(
+                poseStack,
+                this.font,
+                Component.translatable("screen.vsutil.prop_stats"),
+                this.width / 2,
+                35,
+                0xFFFFFF
+        );
+
+        drawString(
+                poseStack,
+                this.font,
+                Component.translatable("screen.vsutil.prop_force", prop.getMaxConfigForce()),
+                this.force.x,
+                52,
+                0xA0A0A0
+        );
         this.force.render(poseStack, mouseX, mouseY, partialTick);
+
+        drawString(
+                poseStack,
+                this.font,
+                Component.translatable("screen.vsutil.prop_maxSpeed", prop.getMaxConfigSpeed()),
+                this.maxSpeed.x,
+                98,
+                0xA0A0A0
+        );
         this.maxSpeed.render(poseStack, mouseX, mouseY, partialTick);
+
+        drawString(
+                poseStack,
+                this.font,
+                Component.translatable("screen.vsutil.prop_accel", prop.getMaxConfigAcceleration()),
+                this.accel.x,
+                144,
+                0xA0A0A0
+        );
         this.accel.render(poseStack, mouseX, mouseY, partialTick);
+
         super.render(poseStack, mouseX, mouseY, partialTick);
     }
 
@@ -189,6 +230,7 @@ public class PropellerBlockScreen extends Screen {
             }
 
             // TODO - cache config max values from server, then do clientside check for user QoL purposes
+            //  Also use cached values in #render above
 
             VSUtilPackets.sendToServer(UpdatePropellerPacket.create(
                     Objects.requireNonNull(prop.getLevel()).dimension(),
@@ -208,7 +250,7 @@ public class PropellerBlockScreen extends Screen {
 
     public static class NumberBox extends EditBox {
         public NumberBox(Font font, int x, int y, String message) {
-            super(font, x, y, 300, 20, Component.translatable("screen.vsutil.prop_" + message));
+            super(font, x, y, 306, 20, Component.translatable("screen.vsutil.prop_" + message));
         }
 
         public double valAsDouble() {
