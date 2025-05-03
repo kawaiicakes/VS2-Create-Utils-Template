@@ -31,8 +31,6 @@ import org.valkyrienskies.mod.common.command.ShipArgument;
 import org.valkyrienskies.mod.common.util.VectorConversionsMCKt;
 import org.valkyrienskies.mod.mixinducks.feature.command.VSCommandSource;
 
-import java.util.Collection;
-
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
@@ -304,7 +302,6 @@ public class Commands {
         ).then(
                 literal("interact").then(argument("pos", BlockPosArgument.blockPos())
                         .executes(context -> {
-                            // FIXME - Unreliable at getting phys bearings to start.
                             try {
                                 ServerLevel level = context.getSource().getLevel();
                                 ServerPlayer player = context.getSource().getPlayer();
