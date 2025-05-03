@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import org.valkyrienskies.core.api.ships.LoadedShip;
@@ -112,8 +113,11 @@ public class TournamentShips implements ShipForcesInducer {
         return new BlockPos(transformed.x, transformed.y, transformed.z);
     }
 
+    @Nullable
     @SuppressWarnings("UnstableApiUsage")
     public static TournamentShips getOrCreate(ServerShip ship, String level) {
+        if (ship == null) return null;
+
         if (ship.getAttachment(TournamentShips.class) != null)
             return ship.getAttachment(TournamentShips.class);
 
@@ -124,13 +128,17 @@ public class TournamentShips implements ShipForcesInducer {
         return toReturn;
     }
 
+    @Nullable
     public static TournamentShips getOrCreate(ServerShip ship) {
+        if (ship == null) return null;
+
         return TournamentShips.getOrCreate(
                 ship,
                 ship.getChunkClaimDimension()
         );
     }
 
+    @Nullable
     public static TournamentShips get(ServerLevel level, BlockPos pos) {
         ServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(level, pos) == null
                 ? VSGameUtilsKt.getShipObjectManagingPos(level, pos)

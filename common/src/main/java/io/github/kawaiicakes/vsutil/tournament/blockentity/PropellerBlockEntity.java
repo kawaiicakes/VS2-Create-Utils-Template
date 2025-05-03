@@ -44,8 +44,6 @@ public abstract class PropellerBlockEntity<T extends BlockEntity> extends BlockE
         this.accel = accel;
     }
 
-    // TODO - does setChanged() need to be called in here to save propeller's (current) speed across restarts?
-    //  Saving seems kinda inconsistent...
     private void tick(Level level) {
         if (this.signal == -1)
             this.signal = PropellerBlock.getPropSignal(this.getBlockState(), level, this.getBlockPos());
@@ -162,11 +160,11 @@ public abstract class PropellerBlockEntity<T extends BlockEntity> extends BlockE
         if (!(this.level instanceof ServerLevel serverLevel)) return;
 
         TournamentShips instance = TournamentShips.get(serverLevel, this.getBlockPos());
-        if (instance != null)
-            instance.addPropeller(
-                    VectorConversionsMCKt.toJOML(this.getBlockPos()),
-                    VectorConversionsMCKt.toJOMLD(this.getBlockState().getValue(FACING).getNormal()).mul(this.force)
-            );
+        if (instance == null) return;
+        instance.addPropeller(
+                VectorConversionsMCKt.toJOML(this.getBlockPos()),
+                VectorConversionsMCKt.toJOMLD(this.getBlockState().getValue(FACING).getNormal()).mul(this.force)
+        );
     }
 
     // Static as this is expected to execute even if the instances of this no longer exist/cannot be referenced

@@ -229,9 +229,6 @@ public class PropellerBlockScreen extends Screen {
                 return true;
             }
 
-            // TODO - cache config max values from server, then do clientside check for user QoL purposes
-            //  Also use cached values in #render above
-
             VSUtilPackets.sendToServer(UpdatePropellerPacket.create(
                     Objects.requireNonNull(prop.getLevel()).dimension(),
                     prop.getBlockPos(),
