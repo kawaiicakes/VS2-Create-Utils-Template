@@ -38,6 +38,7 @@ subprojects {
             name = "ParchmentMC"
             url = "https://maven.parchmentmc.org"
         }
+        maven { url = "https://maven.tterrag.com/" } // Flywheel on both, Create and Registrate on forge
     }
 
     dependencies {
@@ -107,6 +108,9 @@ allprojects {
                     password = project.vs_maven_password
                 }
             }
+        }
+        maven {
+            url "https://cursemaven.com"
         }
     }
 

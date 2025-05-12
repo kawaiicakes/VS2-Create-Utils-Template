@@ -3,7 +3,12 @@
   "package": "io.github.kawaiicakes.vsutil.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ShipObjectServerWorldMixin"
+    "ShipObjectServerWorldMixin",
+    "compat.AbstractCannonProjectileMixin",
+    "compat.CBCUtilsMixin",
+    "interact.FlapBearingBlockMixin",
+    "interact.PhysBearingBlockMixin",
+    "interact.PropellerBearingBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

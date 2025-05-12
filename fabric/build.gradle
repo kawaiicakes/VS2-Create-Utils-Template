@@ -23,17 +23,40 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
+repositories {
+    // mavens for Create Fabric and dependencies
+    maven { url = "https://mvn.devos.one/releases" } // Porting Lib releases
+    maven { url = "https://mvn.devos.one/snapshots" } // Create and several dependencies
+    maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" } // Forge Config API Port
+
+    maven { // Fabric ASM for Porting Lib
+        url = "https://jitpack.io/"
+        content { includeGroupAndSubgroups("com.github") }
+    }
+
+    maven { url = "https://maven.shedaniel.me" } // Cloth Config, REI
+    maven { url = "https://maven.blamejared.com" } // JEI
+
+    maven { url = "https://api.modrinth.com/maven" } // LazyDFU
+    maven { url = "https://maven.terraformersmc.com/releases" } // Mod Menu, EMI
+}
+
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
 
-    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:$mixin_extras_version")))
-
     // Valkyrien Skies 2
     modImplementation("org.valkyrienskies:valkyrienskies-119-fabric:${rootProject.vs2_version}")
 
+    // Create - dependencies are added transitively
+    modCompileOnly("com.simibubi.create:create-fabric-$minecraft_version:$create_fabric_version")
+
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+
+    modCompileOnly "curse.maven:create-big-cannons-646668:5598849"
+    modCompileOnly "curse.maven:create-clockwork-807792:5171527"
 }
 
 processResources {

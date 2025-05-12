@@ -44,8 +44,8 @@ configurations {
 dependencies {
     forge "net.minecraftforge:forge:$forge_version"
 
-    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:$mixin_extras_version"))
-    implementation(include("io.github.llamalad7:mixinextras-forge:$mixin_extras_version"))
+    compileOnly("io.github.llamalad7:mixinextras-common:${mixin_extras_version}")
+    annotationProcessor(implementation(include("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")))
 
     // Valkyrien Skies 2
     modImplementation("org.valkyrienskies:valkyrienskies-119-forge:$vs2_version") { transitive = false }
@@ -57,8 +57,16 @@ dependencies {
     // VS needs Kotlin For Forge, even though we don't
     localRuntime "thedarkcolour:kotlinforforge:$kff_version"
 
+    // Create and its dependencies
+    modCompileOnly("com.simibubi.create:create-$minecraft_version:$create_forge_version:slim") { transitive = false }
+    modCompileOnly("com.tterrag.registrate:Registrate:$registrate_forge_version")
+    modCompileOnly("com.jozufozu.flywheel:flywheel-forge-$flywheel_forge_minecraft_version:$flywheel_forge_version")
+
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    modCompileOnly "curse.maven:create-big-cannons-646668:5812622"
+    modCompileOnly "curse.maven:create-clockwork-807792:5171528"
 }
 
 processResources {

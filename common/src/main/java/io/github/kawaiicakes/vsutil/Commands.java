@@ -6,11 +6,11 @@ import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import io.github.kawaiicakes.vsutil.api.CollisionPairData;
 import io.github.kawaiicakes.vsutil.api.DisabledCollisionData;
 import io.github.kawaiicakes.vsutil.api.InteractLogic;
 import io.github.kawaiicakes.vsutil.api.ShipifyLogic;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -35,8 +35,6 @@ import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 public class Commands {
-    public static final SimpleCommandExceptionType NO_PLAYERS = new SimpleCommandExceptionType(Component.translatable("permissions.vsutil.requires.player"));
-
     public static LiteralArgumentBuilder<CommandSourceStack> registerCommands(
             LiteralArgumentBuilder<CommandSourceStack> literalBuilder
     ) {
@@ -55,7 +53,7 @@ public class Commands {
                                     VSUtil.LOGGER.error("Exception while running shipify command!", e);
                                 throw e;
                             }
-                            return 0;
+                            return 1;
                         }).then(
                                 argument("static", BoolArgumentType.bool()).executes((context) -> {
                                     try {
@@ -71,7 +69,7 @@ public class Commands {
                                             VSUtil.LOGGER.error("Exception while running shipify command!", e);
                                         throw e;
                                     }
-                                    return 0;
+                                    return 1;
                                 }).then(
                                 argument("scale", DoubleArgumentType.doubleArg(ShipifyLogic.getMinScaling())).executes(
                                         (context -> {
@@ -89,7 +87,7 @@ public class Commands {
                                                     VSUtil.LOGGER.error("Exception while running shipify command!", e);
                                                 throw e;
                                             }
-                                            return 0;
+                                            return 1;
                                         })
                                 ).then(
                                 argument("no-collide", BoolArgumentType.bool()).executes(context -> {
@@ -108,7 +106,7 @@ public class Commands {
                                             VSUtil.LOGGER.error("Exception while running shipify command!", e);
                                         throw e;
                                     }
-                                    return 0;
+                                    return 1;
                                 }).then(
                                 argument("name", StringArgumentType.word()).executes(context -> {
                                     try {
@@ -127,7 +125,7 @@ public class Commands {
                                             VSUtil.LOGGER.error("Exception while running shipify command!", e);
                                         throw e;
                                     }
-                                    return 0;
+                                    return 1;
                                 }))))))
         ).then(
                 literal("resize").then(argument("ship", ShipArgument.Companion.ships()).then(argument(
@@ -146,7 +144,7 @@ public class Commands {
                             VSUtil.LOGGER.error("Exception while running shipify command!", e);
                         throw e;
                     }
-                    return 0;
+                    return 1;
                 })))
         ).then(
                 literal("getid").then(argument("ship", ShipArgument.Companion.ships())
@@ -215,7 +213,7 @@ public class Commands {
                                 if (player != null)
                                     player.sendSystemMessage(Component.translatable("chat.vsutil.disable_col", ship.getSlug()));
 
-                                return 0;
+                                return 1;
                             } catch (Exception e) {
                                 if (!(e instanceof CommandRuntimeException))
                                     VSUtil.LOGGER.error("Exception while running shipify command!", e);
@@ -239,7 +237,7 @@ public class Commands {
                                 if (player != null)
                                     player.sendSystemMessage(Component.translatable("chat.vsutil.disable_col_between", ship.getSlug(), otherShip.getSlug()));
 
-                                return 0;
+                                return 1;
                             } catch (Exception e) {
                                 if (!(e instanceof CommandRuntimeException))
                                     VSUtil.LOGGER.error("Exception while running shipify command!", e);
@@ -268,7 +266,7 @@ public class Commands {
                                 if (player != null)
                                     player.sendSystemMessage(Component.translatable("chat.vsutil.enable_col", ship.getSlug()));
 
-                                return 0;
+                                return 1;
                             } catch (Exception e) {
                                 if (!(e instanceof CommandRuntimeException))
                                     VSUtil.LOGGER.error("Exception while running shipify command!", e);
@@ -292,7 +290,7 @@ public class Commands {
                                 if (player != null)
                                     player.sendSystemMessage(Component.translatable("chat.vsutil.enable_col_between", ship.getSlug(), otherShip.getSlug()));
 
-                                return 0;
+                                return 1;
                             } catch (Exception e) {
                                 if (!(e instanceof CommandRuntimeException))
                                     VSUtil.LOGGER.error("Exception while running shipify command!", e);
@@ -307,26 +305,20 @@ public class Commands {
                                 ServerPlayer player = context.getSource().getPlayer();
                                 BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "pos");
 
-                                if (player != null) {
-                                    player.sendSystemMessage(Component.translatable(
+                                int toReturn = InteractLogic.interactWith(player, level, pos);
+
+                                if (toReturn < 0) return toReturn;
+
+                                if (player != null)
+                                    player.sendSystemMessage(
+                                            Component.translatable(
                                             "chat.vsutil.interact",
                                             Registry.BLOCK.getKey(level.getBlockState(pos).getBlock()),
                                             pos
-                                    ));
-                                    InteractLogic.interactWith(player, level, pos);
-                                } else {
-                                    ServerPlayer randomPlayer = context.getSource()
-                                            .getServer()
-                                            .getPlayerList()
-                                            .getPlayers()
-                                            .stream()
-                                            .findAny()
-                                            .orElseThrow(NO_PLAYERS::create);
+                                            ).withStyle(ChatFormatting.GREEN)
+                                    );
 
-                                    InteractLogic.interactWith(randomPlayer, level, pos);
-                                }
-
-                                return 0;
+                                return toReturn;
                             } catch (Exception e) {
                                 if (!(e instanceof CommandRuntimeException))
                                     VSUtil.LOGGER.error("Exception while running command!", e);
@@ -377,7 +369,7 @@ public class Commands {
                                     ship.setSlug(StringArgumentType.getString(context, "name"));
                                 }
 
-                                return 0;
+                                return 1;
                             } catch (Exception e) {
                                 if (!(e instanceof CommandRuntimeException))
                                     VSUtil.LOGGER.error("Exception while running command!", e);

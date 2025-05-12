@@ -38,5 +38,8 @@
   "error.vsutil.not_propeller": "This block is no longer a propeller!",
   "error.vsutil.max_force": "Force of %1$s exceeds server max of %2$s!",
   "error.vsutil.max_speed": "Speed of %1$s exceeds server max of %2$s!",
-  "error.vsutil.max_accel": "Acceleration of %1$s exceeds server max of %2$s!"
+  "error.vsutil.max_accel": "Acceleration of %1$s exceeds server max of %2$s!",
+  "error.vsutil.block_not_supported": "This command does not support block \"%1$s\"!",
+  "error.vsutil.block_not_loaded": "The position %1$s is not loaded!",
+  "error.vsutil.misc": "Unexpected error while performing this: \"%1$s\""
 }
