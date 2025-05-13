@@ -19,7 +19,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.valkyrienskies.core.api.ships.QueryableShipData;
@@ -152,12 +151,13 @@ public class Commands {
                             try {
                                 @SuppressWarnings({"RedundantCast", "unchecked"})
                                 Ship ship = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "ship");
-                                ServerPlayer player = context.getSource().getPlayer();
 
                                 long id = ship.getId();
 
-                                if (player != null)
-                                    player.sendSystemMessage(Component.translatable("chat.vsutil.getid", ship.getSlug(), id));
+                                context.getSource().sendSuccess(
+                                        Component.translatable("chat.vsutil.getid", ship.getSlug(), id),
+                                        false
+                                );
 
                                 return 1;
                             } catch (Exception e) {
@@ -173,16 +173,18 @@ public class Commands {
                             try {
                                 long id = LongArgumentType.getLong(context, "id");
                                 ServerLevel level = context.getSource().getLevel();
-                                ServerPlayer player = context.getSource().getPlayer();
 
                                 ServerShip ship = VSGameUtilsKt.getShipObjectWorld(level).getAllShips().getById(id);
 
-                                Component displayToPlayer = ship != null
+                                Component displayToSource = ship != null
                                         ? Component.translatable("chat.vsutil.getslug", id, ship.getSlug())
-                                        : Component.translatable("chat.vsutil.invalid_ship");
+                                        : Component.translatable("chat.vsutil.invalid_ship")
+                                                .withStyle(ChatFormatting.RED);
 
-                                if (player != null)
-                                    player.sendSystemMessage(displayToPlayer);
+                                context.getSource().sendSuccess(
+                                        displayToSource,
+                                        false
+                                );
 
                                 return 1;
                             } catch (Exception e) {
@@ -198,7 +200,6 @@ public class Commands {
                                 @SuppressWarnings({"unchecked", "RedundantCast"})
                                 Ship ship = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "ship");
                                 ServerLevel level = context.getSource().getLevel();
-                                ServerPlayer player = context.getSource().getPlayer();
 
                                 DisabledCollisionData.add(ship.getId());
 
@@ -210,8 +211,10 @@ public class Commands {
                                             .disableCollisionBetweenBodies(ship.getId(), existing.getId());
                                 }
 
-                                if (player != null)
-                                    player.sendSystemMessage(Component.translatable("chat.vsutil.disable_col", ship.getSlug()));
+                                context.getSource().sendSuccess(
+                                        Component.translatable("chat.vsutil.disable_col", ship.getSlug()),
+                                        false
+                                );
 
                                 return 1;
                             } catch (Exception e) {
@@ -226,7 +229,6 @@ public class Commands {
                                 @SuppressWarnings({"unchecked", "RedundantCast"})
                                 Ship otherShip = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "otherShip");
                                 ServerLevel level = context.getSource().getLevel();
-                                ServerPlayer player = context.getSource().getPlayer();
 
                                 CollisionPairData.add(ship.getId(), otherShip.getId());
 
@@ -234,8 +236,10 @@ public class Commands {
 
                                 shipObjectWorld.disableCollisionBetweenBodies(ship.getId(), otherShip.getId());
 
-                                if (player != null)
-                                    player.sendSystemMessage(Component.translatable("chat.vsutil.disable_col_between", ship.getSlug(), otherShip.getSlug()));
+                                context.getSource().sendSuccess(
+                                        Component.translatable("chat.vsutil.disable_col_between", ship.getSlug(), otherShip.getSlug()),
+                                        false
+                                );
 
                                 return 1;
                             } catch (Exception e) {
@@ -251,7 +255,6 @@ public class Commands {
                                 @SuppressWarnings({"unchecked", "RedundantCast"})
                                 Ship ship = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "ship");
                                 ServerLevel level = context.getSource().getLevel();
-                                ServerPlayer player = context.getSource().getPlayer();
 
                                 DisabledCollisionData.remove(ship.getId());
 
@@ -263,8 +266,10 @@ public class Commands {
                                             .enableCollisionBetweenBodies(ship.getId(), existing.getId());
                                 }
 
-                                if (player != null)
-                                    player.sendSystemMessage(Component.translatable("chat.vsutil.enable_col", ship.getSlug()));
+                                context.getSource().sendSuccess(
+                                        Component.translatable("chat.vsutil.enable_col", ship.getSlug()),
+                                        false
+                                );
 
                                 return 1;
                             } catch (Exception e) {
@@ -279,7 +284,6 @@ public class Commands {
                                 @SuppressWarnings({"unchecked", "RedundantCast"})
                                 Ship otherShip = ShipArgument.Companion.getShip(((CommandContext<? extends VSCommandSource>) (Object) context), "otherShip");
                                 ServerLevel level = context.getSource().getLevel();
-                                ServerPlayer player = context.getSource().getPlayer();
 
                                 CollisionPairData.remove(ship.getId(), otherShip.getId());
 
@@ -287,8 +291,10 @@ public class Commands {
 
                                 shipObjectWorld.enableCollisionBetweenBodies(ship.getId(), otherShip.getId());
 
-                                if (player != null)
-                                    player.sendSystemMessage(Component.translatable("chat.vsutil.enable_col_between", ship.getSlug(), otherShip.getSlug()));
+                                context.getSource().sendSuccess(
+                                        Component.translatable("chat.vsutil.enable_col_between", ship.getSlug(), otherShip.getSlug()),
+                                        false
+                                );
 
                                 return 1;
                             } catch (Exception e) {
@@ -302,21 +308,21 @@ public class Commands {
                         .executes(context -> {
                             try {
                                 ServerLevel level = context.getSource().getLevel();
-                                ServerPlayer player = context.getSource().getPlayer();
+                                CommandSourceStack source = context.getSource();
                                 BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "pos");
 
-                                int toReturn = InteractLogic.interactWith(player, level, pos);
+                                int toReturn = InteractLogic.interactWith(source, level, pos);
 
                                 if (toReturn < 0) return toReturn;
 
-                                if (player != null)
-                                    player.sendSystemMessage(
-                                            Component.translatable(
-                                            "chat.vsutil.interact",
-                                            Registry.BLOCK.getKey(level.getBlockState(pos).getBlock()),
-                                            pos
-                                            ).withStyle(ChatFormatting.GREEN)
-                                    );
+                                context.getSource().sendSuccess(
+                                        Component.translatable(
+                                                "chat.vsutil.interact",
+                                                Registry.BLOCK.getKey(level.getBlockState(pos).getBlock()),
+                                                pos
+                                        ).withStyle(ChatFormatting.GREEN),
+                                        false
+                                );
 
                                 return toReturn;
                             } catch (Exception e) {
@@ -353,18 +359,33 @@ public class Commands {
                                     if (ship == null) throw new AssertionError();
 
                                     ship.setSlug(StringArgumentType.getString(context, "name"));
-                                    context.getSource().getPlayer().sendSystemMessage(
+
+                                    context.getSource().sendSuccess(
                                             Component.translatable("chat.vsutil.successful_rename")
+                                                    .withStyle(ChatFormatting.GREEN),
+                                            false
                                     );
                                 } else {
+                                    if (!VSGameUtilsKt.isBlockInShipyard(level, context.getSource().getPosition())) {
+                                        context.getSource().sendFailure(
+                                                Component.translatable("argument.valkyrienskies.ship.no_found")
+                                                        .withStyle(ChatFormatting.RED)
+                                        );
+                                        return -1;
+                                    }
+
                                     ServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(
                                             level,
                                             VectorConversionsMCKt.toJOML(context.getSource().getPosition())
                                     );
 
-                                    if (ship == null) throw new CommandRuntimeException(
-                                            Component.translatable("argument.valkyrienskies.ship.no_found")
-                                    );
+                                    if (ship == null) {
+                                        context.getSource().sendFailure(
+                                                Component.translatable("argument.valkyrienskies.ship.no_found")
+                                                        .withStyle(ChatFormatting.RED)
+                                        );
+                                        return -1;
+                                    }
 
                                     ship.setSlug(StringArgumentType.getString(context, "name"));
                                 }

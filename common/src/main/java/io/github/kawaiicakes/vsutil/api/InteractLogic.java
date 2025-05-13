@@ -2,18 +2,17 @@ package io.github.kawaiicakes.vsutil.api;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
@@ -27,15 +26,14 @@ public class InteractLogic {
             new ResourceLocation("vs_clockwork", "flap_bearing")
     };
 
-    public static int interactWith(@Nullable ServerPlayer player, ServerLevel level, BlockPos blockPos) {
+    public static int interactWith(CommandSourceStack source, ServerLevel level, BlockPos blockPos) {
         try {
             //noinspection deprecation
             if (!level.hasChunkAt(blockPos)) {
-                if (player != null)
-                    player.sendSystemMessage(
-                            Component.translatable("error.vsutil.block_not_loaded", blockPos)
-                                    .withStyle(ChatFormatting.RED)
-                    );
+                source.sendFailure(
+                        Component.translatable("error.vsutil.block_not_loaded", blockPos)
+                                .withStyle(ChatFormatting.RED)
+                );
                 return -1;
             }
 
@@ -43,11 +41,10 @@ public class InteractLogic {
             ResourceLocation block = Registry.BLOCK.getKey(state.getBlock());
 
             if (Arrays.stream(SUPPORTED).noneMatch(block::equals)) {
-                if (player != null)
-                    player.sendSystemMessage(
-                            Component.translatable("error.vsutil.block_not_supported", block)
-                                    .withStyle(ChatFormatting.RED)
-                    );
+                source.sendFailure(
+                        Component.translatable("error.vsutil.block_not_supported", block)
+                                .withStyle(ChatFormatting.RED)
+                );
                 return -1;
             }
 
@@ -56,16 +53,15 @@ public class InteractLogic {
             );
 
             //noinspection DataFlowIssue
-            state.use(level, player, InteractionHand.OFF_HAND, hitResult);
+            state.use(level, null, InteractionHand.OFF_HAND, hitResult);
 
             return 1;
         } catch (Exception e) {
             LOGGER.error("Error interacting!", e);
-            if (player != null)
-                player.sendSystemMessage(
-                        Component.translatable("error.vsutil.misc")
-                                .withStyle(ChatFormatting.RED)
-                );
+            source.sendFailure(
+                    Component.translatable("error.vsutil.misc")
+                            .withStyle(ChatFormatting.RED)
+            );
             throw e;
         }
     }
