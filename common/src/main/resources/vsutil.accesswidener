@@ -2,3 +2,4 @@ accessWidener   v2  named
 extendable  class  net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
 accessible  method  net/minecraft/world/entity/Entity   getSharedFlag   (I)Z
 accessible  method  net/minecraft/world/entity/Entity   setSharedFlag   (IZ)V
+mutable     field   net/minecraft/server/commands/data/DataCommands ALL_PROVIDERS   Ljava/util/List;

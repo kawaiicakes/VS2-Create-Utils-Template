@@ -15,6 +15,9 @@
   "chat.vsutil.prop_success": "Successfully set stats for propeller!",
   "chat.vsutil.pos_get": "Pos %1$s of ship %2$s is %3$s",
 
+  "commands.vsutil.data.ship.query": "%1$s has the following ship data: %2$s",
+  "commands.vsutil.data.ship.modified": "Modified ship data of %1$s",
+
   "screen.vsutil.prop_stats": "Propeller Stats",
   "screen.vsutil.prop_force": "Maximum force this propeller applies at max speed. | MAX: %1$s",
   "screen.vsutil.prop_maxSpeed": "Maximum speed this propeller can achieve. | MAX: %1$s",

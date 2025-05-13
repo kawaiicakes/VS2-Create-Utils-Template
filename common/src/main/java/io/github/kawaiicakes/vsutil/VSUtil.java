@@ -15,12 +15,13 @@ import org.slf4j.Logger;
 import org.valkyrienskies.core.impl.config.VSConfigClass;
 import org.valkyrienskies.core.impl.hooks.VSEvents;
 
-// TODO - /vsutil data command; comes with returns and intended for datapacks
+// FIXME - Fabric?? wtf
 // TODO - After this is tested, 1.0.0 is ready. Prepare README.
 
 // TODO (next release) - Sexy wand stuff including animated sprites and sounds
 // TODO (next release) - Shipify wand (creating ships with a predetermined slug with named wand, adjustable miniship creator?)
 // TODO (next release) - Anti-gravity wand + command
+// TODO (future release) - constraint command + wand. for 1.19.2, implement welds... lol
 /*
     BlockPos are sometimes not loaded on ships. wtf? It seems like this is a random error. I don't even know how to
     reproduce it, but I've made SpaceEye aware of the problem. It's probably best to ignore it for now
