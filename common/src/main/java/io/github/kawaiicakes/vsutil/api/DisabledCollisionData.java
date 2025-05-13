@@ -16,6 +16,11 @@ import java.util.Set;
 
 import static io.github.kawaiicakes.vsutil.VSUtil.MOD_ID;
 
+/**
+ * SPDX-License-Identifier: UNLICENSED
+ * <br><br>
+ * This class is largely the work of <a href="https://www.curseforge.com/members/endal/projects">Endal.</a>
+ */
 public class DisabledCollisionData extends SavedData {
     protected static DisabledCollisionData INSTANCE = null;
 

@@ -13,6 +13,7 @@
   "chat.vsutil.interact": "Successfully interacted with %1$s at %2$s!",
   "chat.vsutil.successful_rename": "Successfully renamed Ship!",
   "chat.vsutil.prop_success": "Successfully set stats for propeller!",
+  "chat.vsutil.pos_get": "Pos %1$s of ship %2$s is %3$s",
 
   "screen.vsutil.prop_stats": "Propeller Stats",
   "screen.vsutil.prop_force": "Maximum force this propeller applies at max speed. | MAX: %1$s",

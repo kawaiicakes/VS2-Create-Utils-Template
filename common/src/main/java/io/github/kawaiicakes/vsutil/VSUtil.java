@@ -15,15 +15,16 @@ import org.slf4j.Logger;
 import org.valkyrienskies.core.impl.config.VSConfigClass;
 import org.valkyrienskies.core.impl.hooks.VSEvents;
 
-// TODO - After this is tested, 1.0.0 is ready.
+// TODO - /vsutil data command; comes with returns and intended for datapacks
+// TODO - After this is tested, 1.0.0 is ready. Prepare README.
 
-// FIXME (next release) - BlockPos are sometimes not loaded on ships. wtf? get around this while still checking for load
 // TODO (next release) - Sexy wand stuff including animated sprites and sounds
-// TODO (next release) - Fix vs commands not showing ships
 // TODO (next release) - Shipify wand (creating ships with a predetermined slug with named wand, adjustable miniship creator?)
-// TODO (next release) - /vsutil data command; comes with returns and intended for datapacks
 // TODO (next release) - Anti-gravity wand + command
-// TODO (next release) - Anti-buoyancy wand + command
+/*
+    BlockPos are sometimes not loaded on ships. wtf? It seems like this is a random error. I don't even know how to
+    reproduce it, but I've made SpaceEye aware of the problem. It's probably best to ignore it for now
+ */
 public class VSUtil {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final String MOD_ID = "vsutil";

@@ -16,6 +16,11 @@ import java.util.stream.Collectors;
 
 import static io.github.kawaiicakes.vsutil.VSUtil.MOD_ID;
 
+/**
+ * SPDX-License-Identifier: UNLICENSED
+ * <br><br>
+ * This class is largely the work of <a href="https://www.curseforge.com/members/endal/projects">Endal.</a>
+ */
 public class CollisionPairData extends SavedData {
     private static CollisionPairData INSTANCE;
     private final Set<Pair<Long, Long>> noCollisionPairs = new HashSet<>();
