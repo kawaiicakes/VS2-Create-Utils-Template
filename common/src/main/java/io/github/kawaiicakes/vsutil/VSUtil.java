@@ -15,8 +15,11 @@ import org.slf4j.Logger;
 import org.valkyrienskies.core.impl.config.VSConfigClass;
 import org.valkyrienskies.core.impl.hooks.VSEvents;
 
-// FIXME - Fabric?? wtf
 // TODO - After this is tested, 1.0.0 is ready. Prepare README.
+
+/*
+    Fabric in dev does not work. Seems to work on prod. Weird ass transitive dependency on Porting Lib somewhere
+ */
 
 // TODO (next release) - Sexy wand stuff including animated sprites and sounds
 // TODO (next release) - Shipify wand (creating ships with a predetermined slug with named wand, adjustable miniship creator?)
