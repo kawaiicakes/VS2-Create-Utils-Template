@@ -1,6 +1,5 @@
 package io.github.kawaiicakes.vsutil.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import io.github.kawaiicakes.vsutil.network.UpdatePropellerPacket;
 import io.github.kawaiicakes.vsutil.network.VSUtilPackets;
@@ -10,6 +9,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
@@ -39,7 +39,6 @@ public class PropellerBlockScreen extends Screen {
         super.init();
 
         assert this.minecraft != null;
-        this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 
         PropellerBlockEntity<?> prop = this.prop.get();
         if (prop == null) {
@@ -47,17 +46,23 @@ public class PropellerBlockScreen extends Screen {
             return;
         }
 
-        this.addRenderableWidget(new Button(
-                this.width / 2 - 4 - 150, 210,
-                150, 20,
-                CommonComponents.GUI_DONE,
-                button -> this.onDone())
+        this.addRenderableWidget(
+                Button.builder(
+                    CommonComponents.GUI_DONE,
+                    button -> this.onDone()
+                )
+                        .pos(this.width / 2 - 4 - 150, 210)
+                        .size(150, 20)
+                        .build()
         );
-        this.addRenderableWidget(new Button(
-                this.width / 2 + 4, 210,
-                150, 20,
-                CommonComponents.GUI_CANCEL,
-                button -> this.onCancel())
+        this.addRenderableWidget(
+                Button.builder(
+                        CommonComponents.GUI_CANCEL,
+                        button -> this.onCancel()
+                )
+                        .pos(this.width / 2 + 4, 210)
+                        .size(150, 20)
+                        .build()
         );
 
         this.addRenderableWidget(
@@ -116,7 +121,6 @@ public class PropellerBlockScreen extends Screen {
     public void removed() {
         super.removed();
         assert this.minecraft != null;
-        this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
     }
 
     @Override
@@ -138,16 +142,16 @@ public class PropellerBlockScreen extends Screen {
     }
 
     @Override
-    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         PropellerBlockEntity<?> prop = this.prop.get();
         if (prop == null) {
             this.onCancel();
             return;
         }
 
-        this.renderBackground(poseStack);
-        drawCenteredString(
-                poseStack,
+        this.renderBackground(guiGraphics);
+
+        guiGraphics.drawCenteredString(
                 this.font,
                 Component.translatable("screen.vsutil.prop_stats"),
                 this.width / 2,
@@ -155,37 +159,34 @@ public class PropellerBlockScreen extends Screen {
                 0xFFFFFF
         );
 
-        drawString(
-                poseStack,
+        guiGraphics.drawString(
                 this.font,
                 Component.translatable("screen.vsutil.prop_force", prop.getMaxConfigForce()),
-                this.force.x,
+                this.force.getX(),
                 52,
                 0xA0A0A0
         );
-        this.force.render(poseStack, mouseX, mouseY, partialTick);
+        this.force.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        drawString(
-                poseStack,
+        guiGraphics.drawString(
                 this.font,
                 Component.translatable("screen.vsutil.prop_maxSpeed", prop.getMaxConfigSpeed()),
-                this.maxSpeed.x,
+                this.maxSpeed.getX(),
                 98,
                 0xA0A0A0
         );
-        this.maxSpeed.render(poseStack, mouseX, mouseY, partialTick);
+        this.maxSpeed.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        drawString(
-                poseStack,
+        guiGraphics.drawString(
                 this.font,
                 Component.translatable("screen.vsutil.prop_accel", prop.getMaxConfigAcceleration()),
-                this.accel.x,
+                this.accel.getX(),
                 144,
                 0xA0A0A0
         );
-        this.accel.render(poseStack, mouseX, mouseY, partialTick);
+        this.accel.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        super.render(poseStack, mouseX, mouseY, partialTick);
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     @Override

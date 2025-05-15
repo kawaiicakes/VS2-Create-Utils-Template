@@ -19,6 +19,7 @@ public class VSUtilFabricClient implements ClientModInitializer {
         VSUtil.initClient();
         VSUtil.initClientRenderers(new ClientRenderersFabric());
 
+        //noinspection deprecation
         ModelLoadingRegistry.INSTANCE.registerModelProvider(
                 (manager, out) -> TournamentModels.INSTANCE.MODELS.forEach(out)
         );
@@ -29,6 +30,7 @@ public class VSUtilFabricClient implements ClientModInitializer {
         public <T extends BlockEntity> void registerBlockEntityRenderer(
                 @NotNull BlockEntityType<T> t,
                 @NotNull BlockEntityRendererProvider<T> r) {
+            //noinspection deprecation
             BlockEntityRendererRegistry.register(t, r);
         }
     }

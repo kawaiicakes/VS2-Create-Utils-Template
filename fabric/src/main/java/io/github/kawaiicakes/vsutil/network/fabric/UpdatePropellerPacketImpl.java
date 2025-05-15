@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -40,7 +40,7 @@ public class UpdatePropellerPacketImpl extends UpdatePropellerPacket {
             MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
             FriendlyByteBuf buf, PacketSender responseSender
     ) {
-        ResourceKey<Level> key = buf.readResourceKey(Registry.DIMENSION_REGISTRY);
+        ResourceKey<Level> key = buf.readResourceKey(Registries.DIMENSION);
         BlockPos pos = buf.readBlockPos();
         double force = buf.readDouble();
         float speed = buf.readFloat();

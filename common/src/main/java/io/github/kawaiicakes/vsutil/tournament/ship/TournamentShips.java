@@ -3,10 +3,10 @@ package io.github.kawaiicakes.vsutil.tournament.ship;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.util.concurrent.AtomicDouble;
-import io.github.kawaiicakes.vsutil.tournament.blockentity.PropellerBlockEntity;
 import io.github.kawaiicakes.vsutil.tournament.TickScheduler;
+import io.github.kawaiicakes.vsutil.tournament.blockentity.PropellerBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -93,7 +93,7 @@ public class TournamentShips implements ShipForcesInducer {
     private static ResourceKey<Level> getDimensionKey(String dimensionId) {
         String[] split = dimensionId.split(":");
         ResourceLocation location = new ResourceLocation(split[split.length - 2], split[split.length - 1]);
-        return ResourceKey.create(Registry.DIMENSION_REGISTRY, location);
+        return ResourceKey.create(Registries.DIMENSION, location);
     }
 
     public void addPropeller(Vector3i pos, Vector3d force) {
@@ -110,7 +110,7 @@ public class TournamentShips implements ShipForcesInducer {
         Vector3d transformed = shipCore
                 .getShipToWorld()
                 .transformPosition(pos);
-        return new BlockPos(transformed.x, transformed.y, transformed.z);
+        return new BlockPos((int) transformed.x, (int) transformed.y, (int) transformed.z);
     }
 
     @Nullable

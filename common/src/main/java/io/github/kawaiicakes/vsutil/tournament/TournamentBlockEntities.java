@@ -10,7 +10,7 @@ import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -28,7 +28,7 @@ public class TournamentBlockEntities {
     public static final TournamentBlockEntities INSTANCE = new TournamentBlockEntities();
     private final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(
             MOD_ID,
-            Registry.BLOCK_ENTITY_TYPE_REGISTRY
+            Registries.BLOCK_ENTITY_TYPE
     );
 
     private final List<RendererEntry<?>> renderers = new ArrayList<>();

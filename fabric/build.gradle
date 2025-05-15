@@ -47,7 +47,7 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
 
     // Valkyrien Skies 2
-    modImplementation("org.valkyrienskies:valkyrienskies-119-fabric:${rootProject.vs2_version}")
+    modImplementation("org.valkyrienskies:valkyrienskies-120-fabric:${rootProject.vs2_version}")
 
     // Create - dependencies are added transitively
     modCompileOnly("com.simibubi.create:create-fabric-$minecraft_version:$create_fabric_version")
@@ -55,8 +55,8 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
-    modCompileOnly "curse.maven:create-big-cannons-646668:5598849"
-    modCompileOnly "curse.maven:create-clockwork-807792:5171527"
+    modCompileOnly "curse.maven:create-big-cannons-646668:6064373"
+    modCompileOnly "curse.maven:create-clockwork-807792:5580458"
 }
 
 processResources {

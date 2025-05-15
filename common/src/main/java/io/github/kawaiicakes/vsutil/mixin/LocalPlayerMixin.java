@@ -8,18 +8,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin extends Player implements LocalPlayerInterfaceMixin {
     private LocalPlayerMixin(
             Level level, BlockPos blockPos, float f,
-            GameProfile gameProfile, @Nullable ProfilePublicKey profilePublicKey
+            GameProfile gameProfile
     ) {
-        super(level, blockPos, f, gameProfile, profilePublicKey);
+        super(level, blockPos, f, gameProfile);
     }
 
     @Override

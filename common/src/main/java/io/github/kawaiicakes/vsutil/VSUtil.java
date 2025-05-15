@@ -12,8 +12,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.slf4j.Logger;
-import org.valkyrienskies.core.impl.config.VSConfigClass;
+import org.valkyrienskies.core.impl.config_impl.VSConfigClassImpl;
 import org.valkyrienskies.core.impl.hooks.VSEvents;
+
+// TODO - Test on both loaders, then this is ready for 1.0.0-beta release
 
 /*
     Fabric in dev does not work. Seems to work on prod. Weird ass transitive dependency on Porting Lib somewhere
@@ -32,13 +34,14 @@ public class VSUtil {
     public static final String MOD_ID = "vsutil";
 
     public static void init() {
-        VSConfigClass.Companion.registerConfig("vsutil", TournamentConfig.class);
+        VSConfigClassImpl.Companion.registerConfig("vsutil", TournamentConfig.class);
 
         TournamentBlocks.INSTANCE.register();
         TournamentBlockEntities.INSTANCE.register();
         TournamentItems.INSTANCE.register();
 
         // Ensures the attachment actually ticks on initial save (i.e. without requiring a restart)
+        //noinspection deprecation
         VSEvents.INSTANCE.getShipLoadEvent().on(
                 event -> TournamentShips.getOrCreate(event.getShip())
         );

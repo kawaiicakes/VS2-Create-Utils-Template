@@ -81,6 +81,7 @@ public class ShipDataAccessor implements DataAccessor {
             Vector3dc newOmega,
             String newDimension,
             Double newScale
+            Vector3dc newPosInShip
 
             /data modify ship BALL_SUCKER Pos merge from entity Dev Pos
          */
@@ -94,7 +95,8 @@ public class ShipDataAccessor implements DataAccessor {
                         vecFromList(omega),
                         this.ship.getChunkClaimDimension(),
                         // arbitrarily chosen component; the value should almost always be the same for each component
-                        this.ship.getTransform().getShipToWorldScaling().x()
+                        this.ship.getTransform().getShipToWorldScaling().x(),
+                        this.ship.getTransform().getPositionInShip()
                 )
         );
     }

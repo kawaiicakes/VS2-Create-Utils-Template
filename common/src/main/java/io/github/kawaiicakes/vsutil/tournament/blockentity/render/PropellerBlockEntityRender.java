@@ -1,12 +1,13 @@
 package io.github.kawaiicakes.vsutil.tournament.blockentity.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import io.github.kawaiicakes.vsutil.tournament.TournamentModels;
 import io.github.kawaiicakes.vsutil.tournament.blockentity.PropellerBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.level.block.DirectionalBlock;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -31,7 +32,9 @@ public class PropellerBlockEntityRender<T extends PropellerBlockEntity<T>> imple
 
         poseStack.translate(0.5, 0.5, 0.5);
         poseStack.mulPose(blockEntity.getBlockState().getValue(DirectionalBlock.FACING).getOpposite().getRotation());
-        poseStack.mulPose(Vector3f.YP.rotationDegrees((float) blockEntity.rotation));
+        poseStack.mulPose(
+                new Quaternionf(new AxisAngle4f((float) Math.toRadians(blockEntity.rotation), 0f, 1f, 0f))
+        );
         poseStack.translate(-0.5, -0.5, -0.5);
 
         this.model.renderer.render(

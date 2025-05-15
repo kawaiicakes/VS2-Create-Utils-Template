@@ -1,9 +1,9 @@
 package io.github.kawaiicakes.vsutil.tournament.block;
 
 import io.github.kawaiicakes.vsutil.api.LocalPlayerInterfaceMixin;
-import io.github.kawaiicakes.vsutil.tournament.util.block.DirectionalBaseEntityBlock;
 import io.github.kawaiicakes.vsutil.tournament.blockentity.PropellerBlockEntity;
 import io.github.kawaiicakes.vsutil.tournament.util.RotShapes;
+import io.github.kawaiicakes.vsutil.tournament.util.block.DirectionalBaseEntityBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -59,7 +59,8 @@ public class PropellerBlock extends DirectionalBaseEntityBlock implements Redsto
 
     public PropellerBlock(BiFunction<BlockPos, BlockState, BlockEntity> beConstr) {
         super(
-                Properties.of(Material.STONE)
+                Properties.of()
+                        .mapColor(MapColor.STONE)
                         .sound(SoundType.STONE)
                         .strength(1.0f, 2.0f)
         );
@@ -147,7 +148,7 @@ public class PropellerBlock extends DirectionalBaseEntityBlock implements Redsto
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
         if (blockEntity instanceof PropellerBlockEntity<?> prop) {
-            if (player.level.isClientSide)
+            if (player.level().isClientSide)
                 ((LocalPlayerInterfaceMixin) ((Object) player)).vsutil$openPropeller(prop);
             return prop.isUneditable()
                     ? InteractionResult.PASS

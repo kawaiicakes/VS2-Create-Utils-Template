@@ -5,7 +5,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +38,7 @@ public class InteractLogic {
             }
 
             BlockState state = level.getBlockState(blockPos);
-            ResourceLocation block = Registry.BLOCK.getKey(state.getBlock());
+            ResourceLocation block = BuiltInRegistries.BLOCK.getKey(state.getBlock());
 
             if (Arrays.stream(SUPPORTED).noneMatch(block::equals)) {
                 source.sendFailure(

@@ -4,37 +4,34 @@ import io.github.kawaiicakes.vsutil.Commands;
 import io.github.kawaiicakes.vsutil.VSUtil;
 import io.github.kawaiicakes.vsutil.api.CollisionPairData;
 import io.github.kawaiicakes.vsutil.api.DisabledCollisionData;
-import io.github.kawaiicakes.vsutil.item.NoCollisionWand;
 import io.github.kawaiicakes.vsutil.network.fabric.VSUtilPacketsImpl;
 import io.github.kawaiicakes.vsutil.tournament.TickScheduler;
 import io.github.kawaiicakes.vsutil.tournament.TournamentItems;
+import io.github.kawaiicakes.vsutil.tournament.registry.CreativeTabs;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.valkyrienskies.mod.fabric.common.ValkyrienSkiesModFabric;
 
 import static io.github.kawaiicakes.vsutil.VSUtil.MOD_ID;
 import static net.minecraft.commands.Commands.literal;
 
 public class VSUtilFabric implements ModInitializer {
-    public static final Item COLLISION_WAND = Registry.register(
-            Registry.ITEM,
-            new ResourceLocation(MOD_ID + ":collision_wand"),
-            new NoCollisionWand()
-    );
-
     @Override
     public void onInitialize() {
         // force VS2 to load before this
         new ValkyrienSkiesModFabric().onInitialize();
         VSUtil.init();
+
+        Registry.register(
+                BuiltInRegistries.CREATIVE_MODE_TAB,
+                TournamentItems.TAB,
+                CreativeTabs.create()
+        );
 
         CommandRegistrationCallback.EVENT.register((a,b,c) -> a.register(Commands.registerCommands(literal(MOD_ID))));
 
@@ -44,11 +41,6 @@ public class VSUtilFabric implements ModInitializer {
         });
 
         VSUtilPacketsImpl.register();
-
-        TournamentItems.INSTANCE.TAB = FabricItemGroupBuilder
-                .create(new ResourceLocation(VSUtil.MOD_ID, "main_tab"))
-                .icon(() -> new ItemStack(COLLISION_WAND))
-                .build();
 
         ServerTickEvents.END_SERVER_TICK.register(TickScheduler.INSTANCE::tickServer);
 

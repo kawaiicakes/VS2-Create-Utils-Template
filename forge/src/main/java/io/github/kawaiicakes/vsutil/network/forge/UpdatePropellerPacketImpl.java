@@ -4,7 +4,7 @@ import io.github.kawaiicakes.vsutil.network.UpdatePropellerPacket;
 import io.github.kawaiicakes.vsutil.tournament.blockentity.PropellerBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -43,7 +43,7 @@ public class UpdatePropellerPacketImpl extends UpdatePropellerPacket {
     }
 
     public UpdatePropellerPacketImpl(FriendlyByteBuf buf) {
-        this.level = buf.readResourceKey(Registry.DIMENSION_REGISTRY);
+        this.level = buf.readResourceKey(Registries.DIMENSION);
         this.pos = buf.readBlockPos();
         this.force = buf.readDouble();
         this.maxSpeed = buf.readFloat();

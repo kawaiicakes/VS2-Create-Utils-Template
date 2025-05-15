@@ -16,7 +16,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.AABB;
@@ -155,7 +155,7 @@ public class Commands {
                                 long id = ship.getId();
 
                                 context.getSource().sendSuccess(
-                                        Component.translatable("chat.vsutil.getid", ship.getSlug(), id),
+                                        () -> Component.translatable("chat.vsutil.getid", ship.getSlug(), id),
                                         false
                                 );
 
@@ -182,7 +182,7 @@ public class Commands {
                                                 .withStyle(ChatFormatting.RED);
 
                                 context.getSource().sendSuccess(
-                                        displayToSource,
+                                        () -> displayToSource,
                                         false
                                 );
 
@@ -212,7 +212,7 @@ public class Commands {
                                 }
 
                                 context.getSource().sendSuccess(
-                                        Component.translatable("chat.vsutil.disable_col", ship.getSlug()),
+                                        () -> Component.translatable("chat.vsutil.disable_col", ship.getSlug()),
                                         false
                                 );
 
@@ -237,7 +237,7 @@ public class Commands {
                                 shipObjectWorld.disableCollisionBetweenBodies(ship.getId(), otherShip.getId());
 
                                 context.getSource().sendSuccess(
-                                        Component.translatable("chat.vsutil.disable_col_between", ship.getSlug(), otherShip.getSlug()),
+                                        () -> Component.translatable("chat.vsutil.disable_col_between", ship.getSlug(), otherShip.getSlug()),
                                         false
                                 );
 
@@ -267,7 +267,7 @@ public class Commands {
                                 }
 
                                 context.getSource().sendSuccess(
-                                        Component.translatable("chat.vsutil.enable_col", ship.getSlug()),
+                                        () -> Component.translatable("chat.vsutil.enable_col", ship.getSlug()),
                                         false
                                 );
 
@@ -292,7 +292,7 @@ public class Commands {
                                 shipObjectWorld.enableCollisionBetweenBodies(ship.getId(), otherShip.getId());
 
                                 context.getSource().sendSuccess(
-                                        Component.translatable("chat.vsutil.enable_col_between", ship.getSlug(), otherShip.getSlug()),
+                                        () -> Component.translatable("chat.vsutil.enable_col_between", ship.getSlug(), otherShip.getSlug()),
                                         false
                                 );
 
@@ -316,9 +316,9 @@ public class Commands {
                                 if (toReturn < 0) return toReturn;
 
                                 context.getSource().sendSuccess(
-                                        Component.translatable(
+                                        () -> Component.translatable(
                                                 "chat.vsutil.interact",
-                                                Registry.BLOCK.getKey(level.getBlockState(pos).getBlock()),
+                                                BuiltInRegistries.BLOCK.getKey(level.getBlockState(pos).getBlock()),
                                                 pos
                                         ).withStyle(ChatFormatting.GREEN),
                                         false
@@ -361,7 +361,7 @@ public class Commands {
                                     ship.setSlug(StringArgumentType.getString(context, "name"));
 
                                     context.getSource().sendSuccess(
-                                            Component.translatable("chat.vsutil.successful_rename")
+                                            () -> Component.translatable("chat.vsutil.successful_rename")
                                                     .withStyle(ChatFormatting.GREEN),
                                             false
                                     );

@@ -7,7 +7,7 @@ import io.github.kawaiicakes.vsutil.tournament.registry.DeferredRegister;
 import io.github.kawaiicakes.vsutil.tournament.registry.RegistrySupplier;
 import it.unimi.dsi.fastutil.Pair;
 import kotlin.jvm.functions.Function0;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -18,7 +18,7 @@ import java.util.List;
 public class TournamentBlocks {
     public static final TournamentBlocks INSTANCE = new TournamentBlocks();
 
-    private final DeferredRegister<Block> BLOCKS = DeferredRegister.create(VSUtil.MOD_ID, Registry.BLOCK_REGISTRY);
+    private final DeferredRegister<Block> BLOCKS = DeferredRegister.create(VSUtil.MOD_ID, Registries.BLOCK);
     public final List<Pair<String, Function0<? extends BlockItem>>> ITEMS = new ArrayList<>();
 
     public RegistrySupplier<PropellerBlock> PROP_BIG;
@@ -43,7 +43,7 @@ public class TournamentBlocks {
     private <T extends Block> RegistrySupplier<T> register(String name, Function0<T> block) {
         RegistrySupplier<T> supplier = this.BLOCKS.register(name, block);
         this.ITEMS.add(Pair.of(
-                name, () -> new BlockItem(supplier.get(), new Item.Properties().tab(TournamentItems.INSTANCE.TAB)))
+                name, () -> new BlockItem(supplier.get(), new Item.Properties()))
         );
         return supplier;
     }
