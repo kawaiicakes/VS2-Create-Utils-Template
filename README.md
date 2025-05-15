@@ -1,61 +1,72 @@
-<div style="text-align: center;">
-
+<div align="center">
 ___
 
-### Commands & utilities for more deeply interacting with Valkyrien Skies 2.
+### Datapack interaction with Valkyrien Skies 2. Utilities for greater control & fun!
 
-<img alt="Mod Loader" src="https://img.shields.io/badge/mod_loader-forge-ffe8e9?style=for-the-badge&labelColor=ffced2">
-<img alt="Game Version" src="https://img.shields.io/badge/game_version-1.19.2-ffe8e9?style=for-the-badge&labelColor=ffced2">
-<img alt="Environment" src="https://img.shields.io/badge/environment-client | server-ffe8e9?style=for-the-badge&labelColor=ffced2">
-&nbsp;
-<a href="https://www.curseforge.com/minecraft/mc-mods/no-bullship" rel="nofollow">
-    <img alt="CurseForge Downloads" src="https://img.shields.io/curseforge/dt/946299?style=for-the-badge&logo=curseforge&labelColor=ffceea&color=ffe8f5">
-</a>
-<a href="https://github.com/kawaiicakes/NoBullship/blob/main/LICENSE" rel="nofollow">
-    <img alt="GitHub issues" src="https://img.shields.io/github/issues/kawaiicakes/NoBullship?style=for-the-badge&logo=github&labelColor=ffceea&color=ffe8f5&link=https%3A%2F%2Fgithub.com%2Fkawaiicakes%2FNoFortnite">
-</a>
-<a href="https://www.curseforge.com/minecraft/mc-mods/no-bullship" rel="nofollow">
-    <img alt="Software License" src="https://img.shields.io/badge/license-MIT-ffe8f5?style=for-the-badge&labelColor=ffceea">
-</a>
-<br>
-<a href="https://github.com/kawaiicakes" rel="nofollow">
-    <img alt="GitHub" src="https://img.shields.io/badge/-github-fee8ff?style=for-the-badge&logo=github&labelColor=fcceff">
-</a>
+![Mod Loader](https://img.shields.io/badge/mod_loader-forge_|_fabric-ffe8e9?style=for-the-badge&labelColor=ffced2)
+![Environment](https://img.shields.io/badge/environment-client_|_server-ffe8e9?style=for-the-badge&labelColor=ffced2)
+[![Bug Reports](https://img.shields.io/github/issues/kawaiicakes/VSUtil?style=for-the-badge&logo=github&labelColor=ffe8e9&color=ffced2)](https://github.com/kawaiicakes/VSUtil/issues)
 
+[![CurseForge](https://img.shields.io/curseforge/dt/1265645?style=for-the-badge&logo=curseforge&labelColor=ffceea&color=ffe8f5)](https://www.curseforge.com/minecraft/mc-mods/vsutil)
+[![Modrinth](https://img.shields.io/modrinth/dt/sZpOgG7s?style=for-the-badge&logo=modrinth&labelColor=ffceea&color=ffe8f5)](https://modrinth.com/project/vsutil)
 ___
 
-![vsutil](.png)
-
+![VSUtil Header](VSUtilHeader.gif)
 </div>
 
-stuff stuff stuff
+This simple mod adds various commands and items that improve your ship QoL, and I'm not talking about fanfiction. I also threw in some miscellaneous compatibility bug fixes.
+The ultimate idea behind making this mod was to allow me to use command blocks and datapacks to interact with ships. This included stuff like spawning entire warships, but can easily be used for much more creative things. The ship position, rotation, velocity, and angular velocity data blends almost seamlessly with vanilla in the "ship" subcommand addition to the /data command.
+
+It also includes other useful things that other VS addons have added for 1.18.2 and 1.20.1, but not for 1.19.2.
 
 ---
 
 # 📖 Information
-## Features
-- 
+This mod adds more than just commands!
+## 📑 Commands
+Commands are accessed through `/vsutil`! A full breakdown of the commands is on the [mod's wiki.](https://github.com/kawaiicakes/VSUtil/wiki/Commands)
+- `shipify`: create a new ship at a position, including its name/slug, whether it's static, whether it has collisions with other ships, and its scale
+- `resize`: changes the scale of a ship
+- `getid`: Get a ship's numeric ID from its slug
+- `getslug`: Get a ship's slug from its numeric ID
+- `disableCollisions`: Disable ALL ship-to-ship collisions for a ship if no other arguments are given, otherwise disables collisions between two ships.
+- `enableCollisions`: Enable all ship-to-ship collisions for a ship if no other arguments are given, otherwise enables collisions between two ships.
+- `interact`: Does nothing if [Clockwork](https://wiki.valkyrienskies.org/wiki/Clockwork) is not installed. Activate a phys/flap/propeller bearing at a position remotely.
+- `renameCurrent`: renames the ship the command is executed on. For command blocks, the position is the command block itself. For players, the position of the block underneath.
 
+This mod has also changed the vanilla `/data` command!
+- `/data <argument> ship` now exists, allowing deep interplay between vanilla functions & datapacks and VS2. Check the [mod's wiki](https://github.com/kawaiicakes/VSUtil/wiki/Commands) for NBT data info.
+## 🌳 Blocks & Items
+- No Collision Wand for those who want to toggle collisions between two ships by hand.
+- Big/Small Propeller
+  - Modified from their VS: Tournament counterparts; right-clicking them now allows configuration of the propeller's stats
+  - Further changes to a propeller can be locked from the menu.
+  - Includes a config for setting the maximum allowable stats for each propeller
+## 🔧 Fixes 
+- Misc. compatibility fixes (Credit to [Endal!](https://www.curseforge.com/members/endal/projects))
+  - Fixed sounds of Create: Big Cannons autocannons (and its siblings) not working on ships.
+  - Fixed Create: Big Cannons projectile physics and damage
 ___
 
 # 📝 In-Development Features
 
 - Antigravity wands + commands
-- Custom wand models
+- Custom wand models + sounds
 
 ---
 
 # 💗 Credits & Thanks
-This project uses slightly modified code rewritten from Kotlin into Java from [VS: Tournament](https://www.curseforge.com/minecraft/mc-mods/valkyrien-skies-tournament) for
+This project uses slightly modified code rewritten from Kotlin into Java from [VS: Tournament](https://wiki.valkyrienskies.org/wiki/Tournament) for
 the propeller block. All code taken from Tournament is in the package `vsutil.tournament` and used under the Apache-2.0 license.
 Artistic assets are likewise used under the same license and are located under the `vs_tournament` namespace in the mod's
 resource pack. The original license may be found [here,](https://github.com/alex-s168/VS_tournament_continued?tab=Apache-2.0-1-ov-file#readme) and a copy included in this software may be found [here.]()
 
 Other copyrighted work includes Create: Big Cannons compatibility bug fixes and collision save data by [Endal](https://www.curseforge.com/members/endal/projects) from the [Tank Tussle](https://www.patreon.com/TankTussle) community.
 
-Also, shoutout to [Kaupenjoe](https://www.youtube.com/channel/UCbzPhyLcO8VP25dZ7kaUyAw) for his tutorials lol
+Also, shoutout to [Kaupenjoe](https://www.youtube.com/channel/UCbzPhyLcO8VP25dZ7kaUyAw) for his tutorials lol (wouldn't be here now if not for the start he gave me)
 ___
 
-<div style="text-align: center;">Also, check out my very lovely sponsor and help me <s>take over</s> improve the world! I genuinely love DediMC's services, and its incredible customer support has won me over.</div>
+<div align="center">Also, check out my very lovely sponsor and help me <s>take over</s> improve the world! I genuinely love DediMC's services, and its incredible customer support has won me over.
 
 [![Sponsor!](https://github.com/kawaiicakes/kawaiicakes.github.io/blob/main/dedimcashley.png?raw=true 'Sponsor!')](https://dedimc.promo/ashley)
+</div>

@@ -15,8 +15,6 @@ import org.slf4j.Logger;
 import org.valkyrienskies.core.impl.config.VSConfigClass;
 import org.valkyrienskies.core.impl.hooks.VSEvents;
 
-// TODO - After this is tested, 1.0.0 is ready. Prepare README.
-
 /*
     Fabric in dev does not work. Seems to work on prod. Weird ass transitive dependency on Porting Lib somewhere
  */
