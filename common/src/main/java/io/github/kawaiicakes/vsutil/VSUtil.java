@@ -17,10 +17,6 @@ import org.valkyrienskies.core.impl.hooks.VSEvents;
 
 // TODO - Test on both loaders, then this is ready for 1.0.0-beta release
 
-/*
-    Fabric in dev does not work. Seems to work on prod. Weird ass transitive dependency on Porting Lib somewhere
- */
-
 // TODO (next release) - Sexy wand stuff including animated sprites and sounds
 // TODO (next release) - Shipify wand (creating ships with a predetermined slug with named wand, adjustable miniship creator?)
 // TODO (next release) - Anti-gravity wand + command
